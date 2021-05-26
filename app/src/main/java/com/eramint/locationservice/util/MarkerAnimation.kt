@@ -1,4 +1,4 @@
-package com.eramint.locationservice
+package com.eramint.locationservice.util
 
 import android.animation.ObjectAnimator
 import android.animation.TypeEvaluator

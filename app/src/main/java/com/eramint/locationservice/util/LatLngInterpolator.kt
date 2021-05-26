@@ -1,4 +1,4 @@
-package com.eramint.locationservice
+package com.eramint.locationservice.util
 
 import com.google.android.gms.maps.model.LatLng
 import kotlin.math.*

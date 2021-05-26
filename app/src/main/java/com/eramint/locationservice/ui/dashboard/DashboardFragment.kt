@@ -1,8 +1,6 @@
-package com.eramint.locationservice.ui.ui.dashboard
+package com.eramint.locationservice.ui.dashboard
 
-import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +8,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.eramint.locationservice.BaseFragment
 import com.eramint.locationservice.databinding.FragmentDashboardBinding
 
 class DashboardFragment : Fragment() {

@@ -1,4 +1,4 @@
-package com.eramint.locationservice.ui.ui.home
+package com.eramint.locationservice.ui.home
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -10,9 +10,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import com.eramint.locationservice.*
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.eramint.locationservice.R
+import com.eramint.locationservice.base.BaseFragment
 import com.eramint.locationservice.databinding.FragmentHomeBinding
+import com.eramint.locationservice.util.LatLngInterpolator
+import com.eramint.locationservice.util.LocationModel
+import com.eramint.locationservice.util.MarkerAnimation
+import com.eramint.locationservice.util.toGSON
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,12 +27,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.lang.Math.toDegrees
-
 
 class HomeFragment : BaseFragment(), OnMapReadyCallback {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private val viewModel by viewModels<HomeViewModel>()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -38,6 +46,16 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapFragment?.getMapAsync(this)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.locationFlow
+                .map { string -> string?.toGSON() }
+                .collect { locationModel: LocationModel? ->
+                    Log.e(TAG, "locationModel: $locationModel")
+                    onNewLocation(
+                        locationModel = locationModel ?: return@collect
+                    )
+                }
+        }
     }
 
     override fun onCreateView(
@@ -45,7 +63,6 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         _binding?.currentLocation?.setOnClickListener {
             isFirst = true
@@ -59,10 +76,10 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
         _binding = null
     }
 
-    override fun onNewLocation(locationModel: LocationModel) {
+    private fun onNewLocation(locationModel: LocationModel) {
         Log.e(TAG, "onNewLocation:  $locationModel")
-        val oldLatLng = locationModel.from ?: return
-        val newLatLng = locationModel.to ?: return
+        val oldLatLng = locationModel.getFromLatLng()
+        val newLatLng = locationModel.getToLatLng()
 
         setupMapCameraView(userLocationLatLng = oldLatLng)
 

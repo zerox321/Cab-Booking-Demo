@@ -1,4 +1,4 @@
-package com.eramint.locationservice
+package com.eramint.locationservice.base
 
 import android.Manifest
 import android.content.*
@@ -9,11 +9,20 @@ import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.eramint.locationservice.BuildConfig
+import com.eramint.locationservice.R
+import com.eramint.locationservice.local.DataStore
+import com.eramint.locationservice.location.ForegroundOnlyLocationService
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 abstract class LocationActivity : AppCompatActivity() {
     protected val TAG = javaClass.simpleName
+
+    @Inject
+    lateinit var dataStore: DataStore
 
     private val REQUESTFOREGROUNDONLYPERMISSIONSREQUEST_CODE = 34
     private var foregroundOnlyLocationServiceBound = false
@@ -31,7 +40,7 @@ abstract class LocationActivity : AppCompatActivity() {
             foregroundOnlyLocationServiceBound = true
 
             if (foregroundPermissionApproved()) {
-                foregroundOnlyLocationService?.subscribeToLocationUpdates()
+                foregroundOnlyLocationService?.subscribeToLocationUpdates(dataStore=dataStore)
                     ?: Log.d(TAG, "Service Not Bound")
             } else {
                 requestForegroundPermissions()
@@ -128,7 +137,7 @@ abstract class LocationActivity : AppCompatActivity() {
                     Log.d(TAG, "User interaction was cancelled.")
                 grantResults[0] == PackageManager.PERMISSION_GRANTED ->
                     // Permission was granted.
-                    foregroundOnlyLocationService?.subscribeToLocationUpdates()
+                    foregroundOnlyLocationService?.subscribeToLocationUpdates(dataStore)
                 else -> {
                     // Permission denied.
                     val view = currentFocus ?: return
