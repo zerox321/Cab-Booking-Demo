@@ -1,4 +1,4 @@
-package com.eramint.locationservice
+package com.eramint.locationservice.location
 
 
 import android.app.*
@@ -11,10 +11,18 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.eramint.locationservice.R
+import com.eramint.locationservice.local.DataStore
+import com.eramint.locationservice.local.DataStoreImp.saveLocation
 import com.eramint.locationservice.ui.HomeActivity
+import com.eramint.locationservice.util.LocationModel
+import com.eramint.locationservice.util.convertToString
+import com.eramint.locationservice.util.toGSON
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
-import org.greenrobot.eventbus.EventBus
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 
@@ -28,6 +36,7 @@ import java.util.concurrent.TimeUnit
  */
 class ForegroundOnlyLocationService : Service() {
 
+    private var dataStore: DataStore? = null
     private var configurationChange = false
 
     private var serviceRunningInForeground = false
@@ -106,13 +115,23 @@ class ForegroundOnlyLocationService : Service() {
     }
 
     fun emitCurrentLocation() {
-        Log.e(TAG, "emitCurrentLocation: newLocation:$newLocation")
-        Log.e(TAG, "emitCurrentLocation: oldLocation:$oldLocation")
-        if (newLocation == null) return
-        EventBus.getDefault()
-            .post(LocationModel(from = oldLocation ?: newLocation, to = newLocation))
 
-        oldLocation = newLocation
+        GlobalScope.launch {
+            if (newLocation == null) return@launch
+            val old = oldLocation ?: newLocation
+            val model =
+                LocationModel(
+                    fromLat = old?.latitude, fromLon = old?.longitude,
+                    toLat = newLocation?.latitude, toLon = newLocation?.longitude
+                )
+            dataStore?.saveLocation(value = model.convertToString())
+//            oldLocation = LatLng(
+//                newLocation!!.latitude+ Random.nextDouble(0.0, 0.01),
+//                newLocation!!.longitude- Random.nextDouble(0.0, 0.01))
+            oldLocation = newLocation
+        }
+
+
     }
 
     override fun onBind(intent: Intent): IBinder {
@@ -164,7 +183,8 @@ class ForegroundOnlyLocationService : Service() {
         configurationChange = true
     }
 
-    fun subscribeToLocationUpdates() {
+    fun subscribeToLocationUpdates(dataStore: DataStore) {
+        this.dataStore = dataStore
         Log.d(TAG, "subscribeToLocationUpdates()")
 
 

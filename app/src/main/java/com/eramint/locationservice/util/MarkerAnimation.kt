@@ -64,10 +64,11 @@ object MarkerAnimation {
     }
 
     fun animateMarkerToICS(
-        marker: Marker?,
-        finalPosition: LatLng?,
+        marker: Marker,
+        finalPosition: LatLng,
         latLngInterpolator: LatLngInterpolator
     ) {
+        if(marker==null||finalPosition==null)return
         val typeEvaluator =
             TypeEvaluator<LatLng> { fraction, startValue, endValue ->
                 latLngInterpolator.interpolate(

@@ -46,7 +46,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapFragment?.getMapAsync(this)
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             viewModel.locationFlow
                 .map { string -> string?.toGSON() }
                 .collect { locationModel: LocationModel? ->
@@ -91,7 +91,7 @@ class HomeFragment : BaseFragment(), OnMapReadyCallback {
                 .icon(BitmapDescriptorFactory.fromBitmap(userBitMap ?: return))
         )
         MarkerAnimation.animateMarkerToICS(
-            marker = myMarker,
+            marker = myMarker?:return,
             finalPosition = newLatLng,
             latLngInterpolator = latLngInterpolator
         )
