@@ -2,6 +2,7 @@ package com.eramint.locationservice.ui.home
 
 import android.os.Bundle
 import android.util.Log
+import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,10 +29,13 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
+
 class HomeFragment : BaseFragment() {
 
     private val viewModel by viewModels<HomeViewModel>()
-    private val driversMap: HashMap<Int, DriverModel> = HashMap()
+
+    //    private val driversMap: HashMap<Int, DriverModel> = HashMap()
+    private val driversMap = SparseArray<DriverModel>()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -112,7 +116,7 @@ class HomeFragment : BaseFragment() {
 
             }
         }
-        _binding?.currentLocation?.setOnClickListener {
+//        _binding?.currentLocation?.setOnClickListener {
 //            viewLifecycleOwner.lifecycleScope.launch {
 //                Log.e(TAG, "currentLocation: " )
 //                val model =
@@ -125,7 +129,7 @@ class HomeFragment : BaseFragment() {
 //                map.moveMapCamera(userLocationLatLng = model.getToLatLng())
 //
 //            }
-        }
+//        }
         return binding.root
     }
 
@@ -160,7 +164,7 @@ class HomeFragment : BaseFragment() {
         driverID: Int,
         locationModel: LocationModel
     ) {
-        val driverModel = driversMap[driverID]
+        val driverModel = driversMap.get(driverID)
         if (driverModel == null)
             addDriver(
                 driverID = driverID,
@@ -176,27 +180,29 @@ class HomeFragment : BaseFragment() {
                 newPosition = locationModel.getToLatLng(),
                 latLngInterpolator = latLngInterpolator
             )
-            driversMap[driverID]?.driver = locationModel
+            driversMap.get(driverID)?.driver = locationModel
         }
     }
 
 
     private fun GoogleMap.addDriver(driverID: Int, driver: LocationModel) {
         // check if driver is Draw Before
-        if (driversMap[driverID] != null) removeDriver(driverID = driverID)
+        if (driversMap.get(driverID) != null) removeDriver(driverID = driverID)
         val driverMarker = addCustomMarker(
             name = viewModel.driverName,
             oldPosition = driver.getFromLatLng(),
             newPosition = driver.getToLatLng(),
             icon = driverBitMap ?: return
         )
-        driversMap[driverID] =
+        driversMap.append(
+            driverID,
             DriverModel(driverID = driverID, driver = driver, driverMarker = driverMarker)
+        )
     }
 
     private fun removeDriver(driverID: Int) {
         Log.e(TAG, "removeDriver: driverID $driverID")
-        val driverModel: DriverModel = driversMap[driverID] ?: return
+        val driverModel: DriverModel = driversMap.get(driverID) ?: return
         driverModel.driverMarker?.remove()
         driversMap.remove(driverID)
         Log.e(TAG, "removeDriver: driverID $driverID removed Successfully")
