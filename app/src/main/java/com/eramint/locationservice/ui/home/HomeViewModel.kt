@@ -11,4 +11,5 @@ class HomeViewModel @Inject constructor(
     private val dataStore: DataStore
 ) : ViewModel() {
     val locationFlow: Flow<String?> = dataStore.getValue(DataStore.location)
+    val driverName = "Driver Name"
 }

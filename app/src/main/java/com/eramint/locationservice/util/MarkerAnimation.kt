@@ -63,12 +63,10 @@ object MarkerAnimation {
         valueAnimator.start()
     }
 
-    fun animateMarkerToICS(
-        marker: Marker,
+    fun Marker.animateMarkerToICS(
         finalPosition: LatLng,
         latLngInterpolator: LatLngInterpolator
     ) {
-        if(marker==null||finalPosition==null)return
         val typeEvaluator =
             TypeEvaluator<LatLng> { fraction, startValue, endValue ->
                 latLngInterpolator.interpolate(
@@ -82,7 +80,7 @@ object MarkerAnimation {
                 Marker::class.java, LatLng::class.java, "position"
             )
         val animator =
-            ObjectAnimator.ofObject(marker, property, typeEvaluator, finalPosition)
+            ObjectAnimator.ofObject(this, property, typeEvaluator, finalPosition)
         animator.duration = 3000
         animator.start()
     }

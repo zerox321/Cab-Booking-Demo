@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.eramint.locationservice.base.LocationActivity
 import com.eramint.locationservice.R
+import com.eramint.locationservice.base.LocationActivity
 import com.eramint.locationservice.databinding.ActivityHomeBinding
 
 class HomeActivity : LocationActivity() {
@@ -21,6 +21,7 @@ class HomeActivity : LocationActivity() {
 
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.navView.setOnNavigationItemReselectedListener { }
         binding.navView.setupWithNavController(navController)
     }
 }

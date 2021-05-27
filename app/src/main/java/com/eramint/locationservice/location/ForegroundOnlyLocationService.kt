@@ -17,11 +17,9 @@ import com.eramint.locationservice.local.DataStoreImp.saveLocation
 import com.eramint.locationservice.ui.HomeActivity
 import com.eramint.locationservice.util.LocationModel
 import com.eramint.locationservice.util.convertToString
-import com.eramint.locationservice.util.toGSON
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -54,9 +52,9 @@ class ForegroundOnlyLocationService : Service() {
 
     private val locationRequest: LocationRequest by lazy {
         LocationRequest.create().apply {
-            interval = TimeUnit.SECONDS.toMillis(1L)
-            fastestInterval = TimeUnit.SECONDS.toMillis(1L)
-            maxWaitTime = TimeUnit.SECONDS.toMillis(1L)
+            interval = TimeUnit.SECONDS.toMillis(3L)
+            fastestInterval = TimeUnit.SECONDS.toMillis(3L)
+            maxWaitTime = TimeUnit.SECONDS.toMillis(3L)
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
     }
@@ -75,14 +73,6 @@ class ForegroundOnlyLocationService : Service() {
                 newLocation = LatLng(location.latitude, location.longitude)
 
                 emitCurrentLocation()
-
-                // Notify our Activity that a new location was added. Again, if this was a
-                // production app, the Activity would be listening for changes to a database
-                // with new locations, but we are simplifying things a bit to focus on just
-                // learning the location side of things.
-//                val intent = Intent(ACTION_FOREGROUND_ONLY_LOCATION_BROADCAST)
-//                intent.putExtra(EXTRA_LOCATION, currentLocation)
-//                LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
 
                 // Updates notification content if this service is running as a foreground
                 // service.
@@ -125,9 +115,6 @@ class ForegroundOnlyLocationService : Service() {
                     toLat = newLocation?.latitude, toLon = newLocation?.longitude
                 )
             dataStore?.saveLocation(value = model.convertToString())
-//            oldLocation = LatLng(
-//                newLocation!!.latitude+ Random.nextDouble(0.0, 0.01),
-//                newLocation!!.longitude- Random.nextDouble(0.0, 0.01))
             oldLocation = newLocation
         }
 

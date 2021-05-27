@@ -14,11 +14,11 @@ class DataStore @Inject constructor(private val context: Context, name: String) 
     private val Context.dataStore by preferencesDataStore(name = name)
 
     suspend fun setValue(value: String, key: String) {
-        context.dataStore.edit { settings -> settings[stringPreferencesKey(key)] = value }
+        context.dataStore.edit { preferences -> preferences[stringPreferencesKey(key)] = value }
     }
 
     suspend fun removeValue(key: String) {
-        context.dataStore.edit { settings -> settings.remove(stringPreferencesKey(key)) }
+        context.dataStore.edit { preferences -> preferences.remove(stringPreferencesKey(key)) }
     }
 
 
