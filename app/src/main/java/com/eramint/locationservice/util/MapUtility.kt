@@ -5,14 +5,16 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.eramint.locationservice.R
+import com.eramint.locationservice.util.MapUtility.setMapStyle
 import com.eramint.locationservice.util.MarkerAnimation.animateMarkerToICS
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 
-object MapUtili {
+object MapUtility {
     fun GoogleMap.moveMapCamera(position: LatLng) {
         moveCamera(
             CameraUpdateFactory.newCameraPosition(
@@ -24,6 +26,23 @@ object MapUtili {
                 )
             )
         )
+    }
+
+    /**
+     * This function sets the default google map settings.
+     *
+     * @param googleMap to set default settings.
+     */
+
+    fun GoogleMap.defaultMapSettings() {
+        uiSettings.isZoomControlsEnabled = false
+        uiSettings.isMapToolbarEnabled = false
+        uiSettings.isRotateGesturesEnabled = true
+        uiSettings.isMapToolbarEnabled = false
+        uiSettings.isTiltGesturesEnabled = true
+        uiSettings.isCompassEnabled = false
+        isBuildingsEnabled = true
+
     }
 
     fun GoogleMap.addCustomMarker(
@@ -80,7 +99,7 @@ object MapUtili {
         var brng = kotlin.math.atan2(y, x)
         brng = Math.toDegrees(brng)
         brng = (brng + 360) % 360
-        return brng.toFloat()
+        return brng.toFloat()+180
     }
 
     fun Context.setMapStyle(map: GoogleMap) {

@@ -52,9 +52,9 @@ class ForegroundOnlyLocationService : Service() {
 
     private val locationRequest: LocationRequest by lazy {
         LocationRequest.create().apply {
-            interval = TimeUnit.SECONDS.toMillis(3L)
-            fastestInterval = TimeUnit.SECONDS.toMillis(3L)
-            maxWaitTime = TimeUnit.SECONDS.toMillis(3L)
+            interval = TimeUnit.SECONDS.toMillis(locationInterval)
+            fastestInterval = TimeUnit.SECONDS.toMillis(locationInterval)
+            maxWaitTime = TimeUnit.SECONDS.toMillis(locationInterval)
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
     }
@@ -290,6 +290,7 @@ class ForegroundOnlyLocationService : Service() {
     }
 
     companion object {
+        const val locationInterval = 3L
         private const val TAG = "ForegroundOnlyLocation"
 
         private const val NOTIFICATION_ID = 12345678

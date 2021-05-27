@@ -14,11 +14,12 @@ import com.eramint.locationservice.data.DriverModel
 import com.eramint.locationservice.databinding.FragmentHomeBinding
 import com.eramint.locationservice.util.LatLngInterpolator
 import com.eramint.locationservice.util.LocationModel
-import com.eramint.locationservice.util.MapUtili.addCustomMarker
-import com.eramint.locationservice.util.MapUtili.animate
-import com.eramint.locationservice.util.MapUtili.getBitmapFromVectorDrawable
-import com.eramint.locationservice.util.MapUtili.moveMapCamera
-import com.eramint.locationservice.util.MapUtili.setMapStyle
+import com.eramint.locationservice.util.MapUtility.addCustomMarker
+import com.eramint.locationservice.util.MapUtility.animate
+import com.eramint.locationservice.util.MapUtility.defaultMapSettings
+import com.eramint.locationservice.util.MapUtility.getBitmapFromVectorDrawable
+import com.eramint.locationservice.util.MapUtility.moveMapCamera
+import com.eramint.locationservice.util.MapUtility.setMapStyle
 import com.eramint.locationservice.util.toGSON
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -34,7 +35,6 @@ class HomeFragment : BaseFragment() {
 
     private val viewModel by viewModels<HomeViewModel>()
 
-    //    private val driversMap: HashMap<Int, DriverModel> = HashMap()
     private val driversMap = SparseArray<DriverModel>()
 
     private var _binding: FragmentHomeBinding? = null
@@ -60,6 +60,7 @@ class HomeFragment : BaseFragment() {
         if (mMap == null) {
             isFirst = true
             mMap = mapFragment?.awaitMap()
+            mMap?.defaultMapSettings()
             mMap?.let { map -> context?.setMapStyle(map) }
         }
         return mMap
@@ -76,7 +77,12 @@ class HomeFragment : BaseFragment() {
                 }
         }
     }
-
+private val driver=LocationModel(
+    fromLat = 30.7904085,
+    fromLon = 31.0111404,
+    toLat = 30.7904085 - 0.001,
+    toLon = 31.0111404 + 0.001
+)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -91,12 +97,7 @@ class HomeFragment : BaseFragment() {
                 val map = getMap() ?: return@launch
                 map.addDriver(
                     driverID = 1,
-                    driver = LocationModel(
-                        fromLat = 30.786508 + 0.001,
-                        fromLon = 31.000375,
-                        toLat = 30.786508 + 0.001,
-                        toLon = 31.000375 + 0.001
-                    )
+                    driver =driver
                 )
             }
         }
@@ -106,12 +107,7 @@ class HomeFragment : BaseFragment() {
                 val driverID = 1
                 map.updateDriver(
                     driverID = driverID,
-                    locationModel = LocationModel(
-                        fromLat = 30.786508 - 0.001,
-                        fromLon = 31.000375,
-                        toLat = 30.786508 + 0.001,
-                        toLon = 31.000375 - 0.001
-                    )
+                    locationModel = driver
                 )
 
             }
@@ -168,12 +164,7 @@ class HomeFragment : BaseFragment() {
         if (driverModel == null)
             addDriver(
                 driverID = driverID,
-                driver = LocationModel(
-                    fromLat = 30.786508 + 0.001,
-                    fromLon = 31.000375,
-                    toLat = 30.786508 + 0.001,
-                    toLon = 31.000375 + 0.001
-                )
+                driver = driver
             )
         else {
             driverModel.driverMarker?.animate(

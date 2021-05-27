@@ -10,8 +10,10 @@ import android.os.SystemClock
 import android.util.Property
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Interpolator
+import com.eramint.locationservice.location.ForegroundOnlyLocationService
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import java.util.concurrent.TimeUnit
 
 object MarkerAnimation {
     fun animateMarkerToGB(
@@ -67,6 +69,7 @@ object MarkerAnimation {
         finalPosition: LatLng,
         latLngInterpolator: LatLngInterpolator
     ) {
+        rotation = MapUtility.bearingBetweenLocations(position, finalPosition)
         val typeEvaluator =
             TypeEvaluator<LatLng> { fraction, startValue, endValue ->
                 latLngInterpolator.interpolate(
@@ -81,7 +84,8 @@ object MarkerAnimation {
             )
         val animator =
             ObjectAnimator.ofObject(this, property, typeEvaluator, finalPosition)
-        animator.duration = 3000
+        animator.duration =
+            TimeUnit.SECONDS.toMillis(ForegroundOnlyLocationService.locationInterval)
         animator.start()
     }
 }
