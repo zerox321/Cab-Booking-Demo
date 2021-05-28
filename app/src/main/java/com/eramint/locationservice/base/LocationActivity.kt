@@ -3,25 +3,22 @@ package com.eramint.locationservice.base
 import android.Manifest
 import android.content.*
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.Uri
+import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
 import android.util.Log
-import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import com.eramint.locationservice.BuildConfig
 import com.eramint.locationservice.R
-import com.eramint.locationservice.local.DataStore
 import com.eramint.locationservice.location.ForegroundOnlyLocationService
+import com.eramint.locationservice.location.GpsLocationReceiver
+import com.eramint.locationservice.location.LocationUtil.showLocationPrompt
 import com.google.android.material.snackbar.Snackbar
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+
 
 abstract class LocationActivity : BaseActivity() {
-
 
 
     private val REQUESTFOREGROUNDONLYPERMISSIONSREQUEST_CODE = 34
@@ -40,7 +37,7 @@ abstract class LocationActivity : BaseActivity() {
             foregroundOnlyLocationServiceBound = true
 
             if (foregroundPermissionApproved()) {
-                foregroundOnlyLocationService?.subscribeToLocationUpdates(dataStore=dataStore)
+                foregroundOnlyLocationService?.subscribeToLocationUpdates(dataStore = dataStore)
                     ?: Log.d(TAG, "Service Not Bound")
             } else {
                 requestForegroundPermissions()
@@ -55,6 +52,13 @@ abstract class LocationActivity : BaseActivity() {
 
     internal fun getLocation() {
         foregroundOnlyLocationService?.emitCurrentLocation()
+    }
+
+    private val br: GpsLocationReceiver by lazy { GpsLocationReceiver() }
+    private val filter: IntentFilter by lazy { IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION) }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        registerReceiver(br, filter)
     }
 
     override fun onStart() {
@@ -79,6 +83,16 @@ abstract class LocationActivity : BaseActivity() {
 
     }
 
+    private val locationManger: LocationManager by lazy {
+        getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        if (foregroundPermissionApproved() && !locationManger.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            showLocationPrompt()
+    }
 
     // TODO: Step 1.0, Review Permissions: Method checks if permissions approved.
     private fun foregroundPermissionApproved(): Boolean {

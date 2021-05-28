@@ -92,6 +92,9 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     private fun bindView() {
         binding.run {
             viewModel = this@HomeActivity.viewModel
+            currentLocation.setOnClickListener {
+                this@HomeActivity.viewModel.setIsCameraMove(value = false)
+            }
         }
     }
 
@@ -210,7 +213,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
 
     override fun onCameraIdle() {
-        viewModel.setIsCameraMove(value = false)
+//        viewModel.setIsCameraMove(value = false)
 
     }
 

@@ -294,6 +294,6 @@ class ForegroundOnlyLocationService : Service() {
         private const val TAG = "ForegroundOnlyLocation"
 
         private const val NOTIFICATION_ID = 12345678
-        private const val NOTIFICATION_CHANNEL_ID = "while_in_use_channel_01"
+        public const val NOTIFICATION_CHANNEL_ID = "while_in_use_channel_01"
     }
 }

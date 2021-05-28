@@ -4,9 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
 
-        <variable name="viewModel" type="com.eramint.locationservice.ui.HomeViewModel"/>
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.eramint.locationservice.ui.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,13 +33,23 @@
             android:id="@+id/locationPickerIV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
             android:visibility="@{viewModel.isCameraMoving?View.VISIBLE:View.GONE}"
             app:layout_constraintBottom_toBottomOf="@id/map"
             app:layout_constraintEnd_toEndOf="@+id/map"
             app:layout_constraintStart_toStartOf="@id/map"
             app:layout_constraintTop_toTopOf="@id/map"
             app:srcCompat="@drawable/ic_location_picker" />
+
+<!--        <androidx.appcompat.widget.AppCompatImageView-->
+        <!--            android:id="@+id/locationTipIV"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:visibility="@{viewModel.isCameraMoving?View.GONE:View.VISIBLE}"-->
+        <!--            app:layout_constraintBottom_toBottomOf="@id/map"-->
+        <!--            app:layout_constraintEnd_toEndOf="@+id/map"-->
+        <!--            app:layout_constraintStart_toStartOf="@id/map"-->
+        <!--            app:layout_constraintTop_toTopOf="@id/map"-->
+        <!--            app:srcCompat="@drawable/ic_tool_tip" />-->
 
 
         <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
@@ -69,15 +82,15 @@
         <!--            app:layout_constraintEnd_toEndOf="parent"-->
         <!--            app:layout_constraintTop_toBottomOf="@+id/updateDriver" />-->
 
-        <!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-        <!--                android:id="@+id/currentLocation"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_margin="16dp"-->
-        <!--                android:src="@drawable/ic_baseline_my_location_24"-->
-        <!--                app:fabSize="mini"-->
-        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                app:layout_constraintEnd_toEndOf="parent" />-->
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/currentLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:src="@drawable/ic_baseline_my_location_24"
+                        app:fabSize="mini"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

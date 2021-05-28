@@ -21,4 +21,6 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="location_disabled">location_disabled</string>
+    <string name="location_disabled_content">location_disabled_content</string>
 </resources>
