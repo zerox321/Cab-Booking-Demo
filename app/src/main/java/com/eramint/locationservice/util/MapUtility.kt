@@ -1,5 +1,6 @@
 package com.eramint.locationservice.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -8,7 +9,6 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.eramint.locationservice.R
-import com.eramint.locationservice.util.MapUtility.setMapStyle
 import com.eramint.locationservice.util.MarkerAnimation.animateMarkerToICS
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -31,9 +31,8 @@ object MapUtility {
     /**
      * This function sets the default google map settings.
      *
-     * @param googleMap to set default settings.
      */
-
+    @SuppressLint("MissingPermission")
     fun GoogleMap.defaultMapSettings() {
         uiSettings.isZoomControlsEnabled = false
         uiSettings.isMapToolbarEnabled = false
@@ -42,18 +41,18 @@ object MapUtility {
         uiSettings.isTiltGesturesEnabled = true
         uiSettings.isCompassEnabled = false
         isBuildingsEnabled = true
+        isMyLocationEnabled = true
+        uiSettings.isMyLocationButtonEnabled = false
 
     }
 
     fun GoogleMap.addCustomMarker(
-        name: String,
         oldPosition: LatLng,
         newPosition: LatLng,
         icon: Bitmap,
     ) =
         addMarker(
             MarkerOptions()
-                .title(name)
                 .position(oldPosition)
                 .flat(true)
                 .anchor(0.5f, 0.5f)
@@ -99,26 +98,27 @@ object MapUtility {
         var brng = kotlin.math.atan2(y, x)
         brng = Math.toDegrees(brng)
         brng = (brng + 360) % 360
-        return brng.toFloat()+180
+        return brng.toFloat() -90
     }
 
-    fun Context.setMapStyle(map: GoogleMap) {
+    fun GoogleMap.setMapStyle(context: Context) {
 
         try {
             // Customize the styling of the base map using a JSON object defined
             // in a raw resource file.
-            val success = map.setMapStyle(
+            val success = setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
-                    this,
+                    context,
                     R.raw.map_style
                 )
             )
 
-//            if (!success) {
-//                Timber.e("setMapStyle Style parsing failed.")
-//            }
+            if (!success) {
+                Log.e("setMapStyle", " Style parsing failed.")
+            }
         } catch (e: Resources.NotFoundException) {
-//            Timber.e("setMapStyle Error:  ${e.message}")
+            Log.e("setMapStyle", " Error:  ${e.message}")
+
         }
     }
 

@@ -7,8 +7,11 @@ import android.net.Uri
 import android.os.IBinder
 import android.provider.Settings
 import android.util.Log
+import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import com.eramint.locationservice.BuildConfig
 import com.eramint.locationservice.R
 import com.eramint.locationservice.local.DataStore
@@ -17,12 +20,9 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-@AndroidEntryPoint
-abstract class LocationActivity : AppCompatActivity() {
-    protected val TAG = javaClass.simpleName
+abstract class LocationActivity : BaseActivity() {
 
-    @Inject
-    lateinit var dataStore: DataStore
+
 
     private val REQUESTFOREGROUNDONLYPERMISSIONSREQUEST_CODE = 34
     private var foregroundOnlyLocationServiceBound = false
