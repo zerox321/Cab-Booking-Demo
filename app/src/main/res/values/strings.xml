@@ -23,4 +23,10 @@
     <string name="title_notifications">Notifications</string>
     <string name="location_disabled">location_disabled</string>
     <string name="location_disabled_content">location_disabled_content</string>
+    <string name="distanceFormatter">%1$s \nMin</string>
+    <string name="confirm_drop_off">Confirm Drop Off</string>
+    <string name="where_do_you_want_to_go">Where do you want to go ?</string>
+    <string name="confirm_pickup_location">Confirm Pickup Location</string>
+    <string name="confirm_pick_up">Confirm pickup</string>
+
 </resources>

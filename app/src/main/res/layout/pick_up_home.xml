@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.eramint.locationservice.ui.HomeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        tools:background="@color/grey">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/backIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/key_lines"
+            android:elevation="@dimen/key_linesV"
+            android:padding="@dimen/key_linesV"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_back" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_home_gradient"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/whereTv" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/locationPickerIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:visibility="@{viewModel.isCameraMoving?View.VISIBLE:View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_location_picker_pick" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/locationTipIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/ic_tool_tip_pick"
+            android:visibility="@{viewModel.isCoveredArea?View.VISIBLE:View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_tool_tip_pick" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/whereTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:padding="@dimen/key_linesV"
+            android:text="@string/confirm_pickup_location"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mainFont"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/dropOffContainer"
+            app:layout_constraintEnd_toEndOf="@+id/dropOffContainer"
+            app:layout_constraintStart_toStartOf="@+id/dropOffContainer" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/dropOffContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/key_lines"
+            android:layout_marginEnd="@dimen/key_lines"
+            android:layout_marginBottom="@dimen/key_linesV"
+            android:animateLayoutChanges="true"
+            app:cardCornerRadius="@dimen/key_linesV"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="false"
+            app:layout_constraintBottom_toTopOf="@+id/pick_up_BT"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/titleTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/key_linesV"
+                android:hint="@string/confirm_pickup_location"
+                android:padding="@dimen/key_lines"
+                android:singleLine="true"
+                android:text="@{viewModel.pickupPlaceTitleText}"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textSize="@dimen/mainFont"
+                app:drawableStartCompat="@drawable/ic_dot_pick"
+                tools:text="title" />
+
+
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.button.MaterialButton
+
+            android:id="@+id/pick_up_BT"
+            style="@style/rounded_button_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:text="@string/confirm_pick_up"
+            android:visibility="@{viewModel.isCameraMoving?View.VISIBLE:View.GONE}"
+            app:backgroundTint="@color/teal_700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/currentLocationFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_my_location_24"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/whereTv"
+            app:layout_constraintEnd_toEndOf="@+id/dropOffContainer"
+            app:layout_constraintTop_toTopOf="@+id/bg"
+            app:tint="@color/white" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
+

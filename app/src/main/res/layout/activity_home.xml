@@ -10,6 +10,15 @@
         <variable
             name="viewModel"
             type="com.eramint.locationservice.ui.HomeViewModel" />
+
+        <variable
+            name="dropOffView"
+            type="Integer" />
+
+        <variable
+            name="pickupView"
+            type="Integer" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,71 +35,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:context=".ui.home.HomeFragment"
-            tools:visibility="invisible" />
+            tools:context=".ui.home.HomeFragment" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/locationPickerIV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.isCameraMoving?View.VISIBLE:View.GONE}"
-            app:layout_constraintBottom_toBottomOf="@id/map"
-            app:layout_constraintEnd_toEndOf="@+id/map"
-            app:layout_constraintStart_toStartOf="@id/map"
-            app:layout_constraintTop_toTopOf="@id/map"
-            app:srcCompat="@drawable/ic_location_picker" />
+        <include
+            android:id="@+id/drop_off_home"
+            layout="@layout/drop_off_home"
+            tools:visibility="visible"
+            android:visibility="@{viewModel.viewType==dropOffView?View.VISIBLE:View.GONE}"
+            app:viewModel="@{viewModel}" />
 
-<!--        <androidx.appcompat.widget.AppCompatImageView-->
-        <!--            android:id="@+id/locationTipIV"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:visibility="@{viewModel.isCameraMoving?View.GONE:View.VISIBLE}"-->
-        <!--            app:layout_constraintBottom_toBottomOf="@id/map"-->
-        <!--            app:layout_constraintEnd_toEndOf="@+id/map"-->
-        <!--            app:layout_constraintStart_toStartOf="@id/map"-->
-        <!--            app:layout_constraintTop_toTopOf="@id/map"-->
-        <!--            app:srcCompat="@drawable/ic_tool_tip" />-->
-
-
-        <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-        <!--            android:id="@+id/addDriver"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_margin="16dp"-->
-        <!--            android:src="@drawable/ic_baseline_add_24"-->
-        <!--            app:fabSize="mini"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-        <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-        <!--            android:id="@+id/updateDriver"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_margin="16dp"-->
-        <!--            android:src="@drawable/ic_baseline_edit_24"-->
-        <!--            app:fabSize="mini"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/addDriver" />-->
-
-        <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-        <!--            android:id="@+id/removeDriver"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_margin="16dp"-->
-        <!--            android:src="@drawable/ic_baseline_delete_24"-->
-        <!--            app:fabSize="mini"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/updateDriver" />-->
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/currentLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:src="@drawable/ic_baseline_my_location_24"
-                        app:fabSize="mini"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+        <include
+            android:id="@+id/pick_up_home"
+            tools:visibility="gone"
+            layout="@layout/pick_up_home"
+            android:visibility="@{viewModel.viewType==pickupView?View.VISIBLE:View.GONE}"
+            app:viewModel="@{viewModel}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

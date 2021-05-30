@@ -6,6 +6,8 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import android.location.Address
+import android.location.Geocoder
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.eramint.locationservice.R
@@ -13,10 +15,27 @@ import com.eramint.locationservice.util.MarkerAnimation.animateMarkerToICS
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 object MapUtility {
     fun GoogleMap.moveMapCamera(position: LatLng) {
+        Log.e( "moveMapCamera: ", position.toString())
         moveCamera(
+            CameraUpdateFactory.newCameraPosition(
+                CameraPosition(
+                    position,
+                    16f,
+                    cameraPosition.tilt,  //use old tilt
+                    cameraPosition.bearing
+                )
+            )
+        )
+    }
+
+    fun GoogleMap.animateCamera(position: LatLng) {
+        Log.e( "animateCamera: ", position.toString())
+        animateCamera(
             CameraUpdateFactory.newCameraPosition(
                 CameraPosition(
                     position,
@@ -33,7 +52,7 @@ object MapUtility {
      *
      */
     @SuppressLint("MissingPermission")
-    fun GoogleMap.defaultMapSettings() {
+    fun GoogleMap.defaultMapSettings(isLocationEnabled:Boolean) {
         uiSettings.isZoomControlsEnabled = false
         uiSettings.isMapToolbarEnabled = false
         uiSettings.isRotateGesturesEnabled = true
@@ -41,7 +60,7 @@ object MapUtility {
         uiSettings.isTiltGesturesEnabled = true
         uiSettings.isCompassEnabled = false
         isBuildingsEnabled = true
-        isMyLocationEnabled = true
+        isMyLocationEnabled = isLocationEnabled
         uiSettings.isMyLocationButtonEnabled = false
 
     }
@@ -50,13 +69,24 @@ object MapUtility {
         oldPosition: LatLng,
         newPosition: LatLng,
         icon: Bitmap,
-    ) =
+    ): Marker? =
         addMarker(
             MarkerOptions()
                 .position(oldPosition)
                 .flat(true)
                 .anchor(0.5f, 0.5f)
                 .rotation(bearingBetweenLocations(oldPosition, newPosition))
+                .icon(BitmapDescriptorFactory.fromBitmap(icon))
+        )
+    fun GoogleMap.addCustomMarker(
+        position: LatLng,
+        icon: Bitmap,
+    ): Marker? =
+        addMarker(
+            MarkerOptions()
+                .position(position)
+                .flat(true)
+                .anchor(0.5f, 0.5f)
                 .icon(BitmapDescriptorFactory.fromBitmap(icon))
         )
 
@@ -98,7 +128,7 @@ object MapUtility {
         var brng = kotlin.math.atan2(y, x)
         brng = Math.toDegrees(brng)
         brng = (brng + 360) % 360
-        return brng.toFloat() -90
+        return brng.toFloat() - 90
     }
 
     fun GoogleMap.setMapStyle(context: Context) {
@@ -121,5 +151,27 @@ object MapUtility {
 
         }
     }
+
+    suspend fun Geocoder.getAddress(latitude: Double?, longitude: Double?): String =
+        withContext(Dispatchers.IO) {
+            try {
+                if (latitude == null || longitude == null)
+                    throw Exception("LatLng is Null")
+
+                val addresses: List<Address>? = getFromLocation(latitude, longitude, 1)
+                addresses?.let {
+                    val returnedAddress: Address = addresses[0]
+                    val address = "${returnedAddress.adminArea ?: ""}," +
+                            " ${returnedAddress.subAdminArea ?: ""}, ${returnedAddress.locality ?: ""}," +
+                            " ${returnedAddress.thoroughfare ?: ""}"
+
+                    address
+                } ?: ""
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                ""
+            }
+        }
 
 }

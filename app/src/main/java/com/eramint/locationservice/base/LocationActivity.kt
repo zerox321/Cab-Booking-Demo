@@ -16,10 +16,12 @@ import com.eramint.locationservice.location.ForegroundOnlyLocationService
 import com.eramint.locationservice.location.GpsLocationReceiver
 import com.eramint.locationservice.location.LocationUtil.showLocationPrompt
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
 
 
 abstract class LocationActivity : BaseActivity() {
 
+    internal val defaultContext = Dispatchers.Main
 
     private val REQUESTFOREGROUNDONLYPERMISSIONSREQUEST_CODE = 34
     private var foregroundOnlyLocationServiceBound = false
@@ -95,7 +97,7 @@ abstract class LocationActivity : BaseActivity() {
     }
 
     // TODO: Step 1.0, Review Permissions: Method checks if permissions approved.
-    private fun foregroundPermissionApproved(): Boolean {
+    internal fun foregroundPermissionApproved(): Boolean {
         return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
             this,
             Manifest.permission.ACCESS_FINE_LOCATION

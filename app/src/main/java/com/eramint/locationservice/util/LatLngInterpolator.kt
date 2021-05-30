@@ -4,28 +4,7 @@ import com.google.android.gms.maps.model.LatLng
 import kotlin.math.*
 
 interface LatLngInterpolator {
-    fun interpolate(fraction: Float, a: LatLng, b: LatLng): LatLng
-    class Linear : LatLngInterpolator {
-        override fun interpolate(fraction: Float, a: LatLng, b: LatLng): LatLng {
-            val lat = (b.latitude - a.latitude) * fraction + a.latitude
-            val lng = (b.longitude - a.longitude) * fraction + a.longitude
-            return LatLng(lat, lng)
-        }
-    }
-
-    class LinearFixed : LatLngInterpolator {
-        override fun interpolate(fraction: Float, a: LatLng, b: LatLng): LatLng {
-            val lat = (b.latitude - a.latitude) * fraction + a.latitude
-            var lngDelta = b.longitude - a.longitude
-
-            // Take the shortest path across the 180th meridian.
-            if (abs(lngDelta) > 180) {
-                lngDelta -= sign(lngDelta) * 360
-            }
-            val lng = lngDelta * fraction + a.longitude
-            return LatLng(lat, lng)
-        }
-    }
+    fun interpolate(fraction: Float, from: LatLng, to: LatLng): LatLng
 
     class Spherical : LatLngInterpolator {
         override fun interpolate(fraction: Float, from: LatLng, to: LatLng): LatLng {
