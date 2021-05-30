@@ -10,7 +10,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 
-class MapAnimator {
+class MapAnimator(private val primary:Int,private val second: Int) {
+
     private var backgroundPolyline: Polyline? = null
     private var foregroundPolyline: Polyline? = null
     private var optionsForeground: PolylineOptions? = null
@@ -44,9 +45,9 @@ class MapAnimator {
         //Reset the polylines
         foregroundPolyline?.remove()
         backgroundPolyline?.remove()
-        val optionsBackground = PolylineOptions().add(bangaloreRoute[0]).color(GREY).width(5f)
+        val optionsBackground = PolylineOptions().add(bangaloreRoute[0]).color(second).width(5f)
         backgroundPolyline = map.addPolyline(optionsBackground)
-        optionsForeground = PolylineOptions().add(bangaloreRoute[0]).color(Color.BLACK).width(5f)
+        optionsForeground = PolylineOptions().add(bangaloreRoute[0]).color(primary).width(5f)
         foregroundPolyline = map.addPolyline(optionsForeground)
         val percentageCompletion = ValueAnimator.ofInt(0, 100)
         percentageCompletion.duration = 2000
@@ -63,14 +64,14 @@ class MapAnimator {
         percentageCompletion.addListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {}
             override fun onAnimationEnd(animation: Animator) {
-                foregroundPolyline?.color = GREY
+                foregroundPolyline?.color = second
                 foregroundPolyline?.points = backgroundPolyline?.points ?: return
             }
 
             override fun onAnimationCancel(animation: Animator) {}
             override fun onAnimationRepeat(animation: Animator) {}
         })
-        val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), GREY, Color.BLACK)
+        val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), second, primary)
         colorAnimation.interpolator = AccelerateInterpolator()
         colorAnimation.duration = 1200 // milliseconds
         colorAnimation.addUpdateListener { animator ->
@@ -133,6 +134,5 @@ class MapAnimator {
         foregroundPolyline?.points = foregroundPoints ?: return
     }
 
-    val GREY = Color.parseColor("#FFA7A6A6")
 
 }

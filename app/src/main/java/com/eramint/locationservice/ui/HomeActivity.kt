@@ -1,11 +1,11 @@
 package com.eramint.locationservice.ui
 
-import android.graphics.Color
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.util.forEach
 import androidx.lifecycle.lifecycleScope
 import com.eramint.locationservice.R
@@ -53,7 +53,10 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     private val latLngInterpolator: LatLngInterpolator by lazy {
         LatLngInterpolator.Spherical()
     }
-    private val mapAnimator: MapAnimator by lazy { MapAnimator() }
+    private val primary by lazy{ ContextCompat.getColor(this, R.color.purple_700)}
+    private val second by lazy{ ContextCompat.getColor(this, R.color.purple_200)}
+
+    private val mapAnimator: MapAnimator by lazy { MapAnimator(primary = primary, second = second) }
 
 
     private val userBitMap by lazy {
@@ -72,7 +75,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
     private val options by lazy {
         PolylineOptions().apply {
-            color(Color.parseColor("#15AEB4"))
+            color(ContextCompat.getColor(this@HomeActivity, R.color.purple_500))
             width(10f)
         }
     }
