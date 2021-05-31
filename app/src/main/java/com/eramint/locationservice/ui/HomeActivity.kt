@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.core.util.forEach
 import androidx.lifecycle.lifecycleScope
 import com.eramint.locationservice.R
@@ -75,7 +74,6 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     }
 
 
-
     private var isFirst: Boolean = true
     private var userMarker: Marker? = null
     private var dropOffMarker: Marker? = null
@@ -128,15 +126,23 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
             viewModel = this@HomeActivity.viewModel
 
             dropOffView = dropOffViewConstant
-
             pickupView = pickupViewConstant
+            confirmView = confirmViewConstant
 
-            dropOffHome.currentLocationFab.setOnClickListener { getCurrentLocation() }
-            pickUpHome.currentLocationFab.setOnClickListener { getCurrentLocation() }
-            dropOffHome.backIv.setOnClickListener { onBackPressed() }
-            pickUpHome.backIv.setOnClickListener { onBackPressed() }
-            dropOffHome.dropOffBT.setOnClickListener { dropOffClick() }
-            pickUpHome.pickUpBT.setOnClickListener { pickUpClick() }
+            dropOffHome.run {
+                backIv.setOnClickListener { onBackPressed() }
+                dropOffBT.setOnClickListener { dropOffClick() }
+                currentLocationFab.setOnClickListener { getCurrentLocation() }
+            }
+            confirmHome.run {
+                backIv.setOnClickListener { onBackPressed() }
+            }
+            pickUpHome.run {
+                backIv.setOnClickListener { onBackPressed() }
+                pickUpBT.setOnClickListener { pickUpClick() }
+                currentLocationFab.setOnClickListener { getCurrentLocation() }
+
+            }
 
         }
     }

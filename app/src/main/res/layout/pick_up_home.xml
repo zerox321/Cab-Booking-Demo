@@ -103,7 +103,6 @@
                 android:singleLine="true"
                 android:text="@{viewModel.pickupPlaceTitleText}"
                 android:textAlignment="viewStart"
-                android:textColor="@color/black"
                 android:textSize="@dimen/mainFont"
                 app:drawableStartCompat="@drawable/ic_dot_pick"
                 tools:text="title" />

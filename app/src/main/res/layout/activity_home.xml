@@ -19,6 +19,10 @@
             name="pickupView"
             type="Integer" />
 
+        <variable
+            name="confirmView"
+            type="Integer" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,16 +44,23 @@
         <include
             android:id="@+id/drop_off_home"
             layout="@layout/drop_off_home"
-            tools:visibility="visible"
             android:visibility="@{viewModel.viewType==dropOffView?View.VISIBLE:View.GONE}"
-            app:viewModel="@{viewModel}" />
+            app:viewModel="@{viewModel}"
+            tools:visibility="visible" />
 
         <include
             android:id="@+id/pick_up_home"
-            tools:visibility="gone"
             layout="@layout/pick_up_home"
             android:visibility="@{viewModel.viewType==pickupView?View.VISIBLE:View.GONE}"
-            app:viewModel="@{viewModel}" />
+            app:viewModel="@{viewModel}"
+            tools:visibility="gone" />
+
+        <include
+            android:id="@+id/confirm_home"
+            layout="@layout/confirm_home"
+            android:visibility="@{viewModel.viewType==confirmView?View.VISIBLE:View.GONE}"
+            app:viewModel="@{viewModel}"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

@@ -103,7 +103,6 @@
                 android:singleLine="true"
                 android:text="@{viewModel.dropOffPlaceTitleText}"
                 android:textAlignment="viewStart"
-                android:textColor="@color/black"
                 android:textSize="@dimen/mainFont"
                 app:drawableStartCompat="@drawable/ic_dot"
                 tools:text="title" />
