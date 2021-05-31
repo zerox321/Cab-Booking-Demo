@@ -14,14 +14,15 @@ import com.eramint.app.BuildConfig
 import com.eramint.app.R
 import com.eramint.app.location.ForegroundOnlyLocationService
 import com.eramint.app.location.GpsLocationReceiver
-import com.eramint.app.location.LocationUtil.showLocationPrompt
+import com.eramint.app.location.LocationChangeInterface
 import com.eramint.app.util.Constants.REQUESTFOREGROUNDONLYPERMISSIONSREQUEST_CODE
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
 
 
-abstract class LocationActivity : BaseActivity() {
+abstract class LocationActivity : BaseActivity(), LocationChangeInterface {
+
 
     internal val defaultContext = Dispatchers.Main
 
@@ -53,17 +54,14 @@ abstract class LocationActivity : BaseActivity() {
         }
     }
 
-    internal fun getLocation() {
-        foregroundOnlyLocationService?.emitCurrentLocation()
+    private val locationManger: LocationManager by lazy {
+        getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
-    private val notificationManager: NotificationManager by lazy {
-        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    }
     private val br: GpsLocationReceiver by lazy {
         GpsLocationReceiver(
-            notificationManager = notificationManager,
             locationManger = locationManger,
+            locationChangeInterface = this
         )
     }
     private val filter: IntentFilter by lazy { IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION) }
@@ -94,15 +92,12 @@ abstract class LocationActivity : BaseActivity() {
 
     }
 
-    private val locationManger: LocationManager by lazy {
-        getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    }
+
 
 
     override fun onResume() {
         super.onResume()
-        if (foregroundPermissionApproved() && !locationManger.isProviderEnabled(LocationManager.GPS_PROVIDER))
-            showLocationPrompt()
+        onLocationChangeAbstraction(locationValue = locationManger.isProviderEnabled(LocationManager.GPS_PROVIDER))
     }
 
     // TODO: Step 1.0, Review Permissions: Method checks if permissions approved.
@@ -190,5 +185,9 @@ abstract class LocationActivity : BaseActivity() {
         }
     }
 
+    override fun onLocationChange(locationValue: Boolean) {
+        onLocationChangeAbstraction(locationValue = locationValue)
+    }
 
+    abstract fun onLocationChangeAbstraction(locationValue: Boolean)
 }

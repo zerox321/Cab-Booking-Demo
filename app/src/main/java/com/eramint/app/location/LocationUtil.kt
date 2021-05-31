@@ -10,13 +10,13 @@ import androidx.core.app.NotificationCompat
 import com.eramint.app.R
 import com.eramint.app.ui.HomeActivity
 import com.eramint.app.util.Constants.NOTIFICATION_CHANNEL_ID
+import com.eramint.app.util.Constants.No_Location_NOTIFICATION_ID
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 
 object LocationUtil {
-    private const val No_Location_NOTIFICATION_ID = 12345678
     fun NotificationManager.dismissNoLocationNotification() {
         cancel(No_Location_NOTIFICATION_ID)
     }
@@ -48,10 +48,8 @@ object LocationUtil {
         val mainNotificationText = context.getString(R.string.location_disabled_content)
         val bigTextStyle = NotificationCompat.BigTextStyle().bigText(mainNotificationText)
             .setBigContentTitle(titleText)
-        val intent = Intent(context, HomeActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        }
+
+        val intent = Intent(context, HomeActivity::class.java)
 
         val contentIntent =
             PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)

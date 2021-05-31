@@ -14,11 +14,11 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val dataStore: DataStore,
-    val spherical : Spherical,
-    val markerAnimation : MarkerAnimation,
-    val mapUtility : MapUtility,
-    val directionRepo : DirectionRepo,
-    val mapAnimator : MapAnimator
+    val spherical: Spherical,
+    val markerAnimation: MarkerAnimation,
+    val mapUtility: MapUtility,
+    val directionRepo: DirectionRepo,
+    val mapAnimator: MapAnimator
 ) : ViewModel() {
     val locationFlow: Flow<String?> = dataStore.getValue(DataStore.location)
 
@@ -35,6 +35,8 @@ class HomeViewModel @Inject constructor(
             dropOffViewConstant -> dropOffPlaceTitleText.value = location
         }
     }
+    
+    val isLocationEnabled = MutableLiveData<Boolean>(true)
 
 
     val isCameraMoving = MutableLiveData<Boolean>()
@@ -47,8 +49,6 @@ class HomeViewModel @Inject constructor(
         if (value && isCoveredArea.value == null) return
         isCoveredArea.value = value
     }
-
-
 
 
     val timeValue = MutableLiveData<String>("3")

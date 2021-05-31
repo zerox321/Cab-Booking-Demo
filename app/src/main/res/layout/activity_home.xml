@@ -61,6 +61,33 @@
             app:viewModel="@{viewModel}"
             tools:visibility="gone" />
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/noLocationCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="@dimen/key_lines"
+            android:animateLayoutChanges="true"
+            android:visibility="@{viewModel.isLocationEnabled()?View.GONE:View.VISIBLE}"
+            app:cardCornerRadius="@dimen/key_linesV"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/key_linesV"
+                android:gravity="center_vertical"
+                android:padding="@dimen/key_lines"
+                android:text="@string/location_disabled_content"
+                android:textSize="@dimen/mainFont"
+                app:drawableStartCompat="@drawable/ic_baseline_location_off_24" />
+        </androidx.cardview.widget.CardView>
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/test"
             android:layout_width="wrap_content"

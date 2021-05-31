@@ -5,6 +5,7 @@ object Constants {
 
     const val locationInterval = 3L
 
+    const val No_Location_NOTIFICATION_ID = 12345678
     const val NOTIFICATION_ID = 12345678
     const val NOTIFICATION_CHANNEL_ID = "while_in_use_channel_01"
 

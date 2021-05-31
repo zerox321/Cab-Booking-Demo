@@ -12,6 +12,7 @@ import com.eramint.app.data.DriverModel
 import com.eramint.app.data.LocationModel
 import com.eramint.app.data.toGSON
 import com.eramint.app.databinding.ActivityHomeBinding
+import com.eramint.app.location.LocationUtil.showLocationPrompt
 import com.eramint.app.util.Constants.confirmViewConstant
 import com.eramint.app.util.Constants.dropOffViewConstant
 import com.eramint.app.util.Constants.padding
@@ -127,7 +128,9 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
             dropOffView = dropOffViewConstant
             pickupView = pickupViewConstant
             confirmView = confirmViewConstant
-
+            noLocationCardView.setOnClickListener {
+                showLocationPrompt()
+            }
             // Todo attach drop off View click Listener
             dropOffHome.run {
                 backIv.setOnClickListener { onBackPressed() }
@@ -396,6 +399,10 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
             else -> super.onBackPressed()
         }
+    }
+
+    override fun onLocationChangeAbstraction(locationValue: Boolean) {
+        viewModel.isLocationEnabled.value = locationValue
     }
 
 }
