@@ -1,7 +1,6 @@
-package com.eramint.locationservice.util
+package com.eramint.locationservice.util.mapUtility
 
 import android.animation.*
-import android.graphics.Color
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
@@ -10,7 +9,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 
-class MapAnimator(private val primary:Int,private val second: Int) {
+class MapAnimator(private val routeEvaluator:RouteEvaluator,private val primary: Int, private val second: Int) {
 
     private var backgroundPolyline: Polyline? = null
     private var foregroundPolyline: Polyline? = null
@@ -21,6 +20,11 @@ class MapAnimator(private val primary:Int,private val second: Int) {
         secondLoopRunAnimSet?.removeAllListeners()
         secondLoopRunAnimSet?.end()
         secondLoopRunAnimSet?.cancel()
+
+        firstRunAnimSet?.removeAllListeners()
+        firstRunAnimSet?.end()
+        firstRunAnimSet?.cancel()
+
         foregroundPolyline?.remove()
         backgroundPolyline?.remove()
     }
@@ -80,7 +84,7 @@ class MapAnimator(private val primary:Int,private val second: Int) {
         val foregroundRouteAnimator = ObjectAnimator.ofObject(
             this,
             "routeIncreaseForward",
-            RouteEvaluator(),
+            routeEvaluator,
             *bangaloreRoute.toTypedArray()
         )
         foregroundRouteAnimator.interpolator = AccelerateDecelerateInterpolator()

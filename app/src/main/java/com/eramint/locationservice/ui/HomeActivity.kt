@@ -12,18 +12,7 @@ import com.eramint.locationservice.R
 import com.eramint.locationservice.base.LocationActivity
 import com.eramint.locationservice.data.DriverModel
 import com.eramint.locationservice.databinding.ActivityHomeBinding
-import com.eramint.locationservice.util.LatLngInterpolator
 import com.eramint.locationservice.util.LocationModel
-import com.eramint.locationservice.util.MapAnimator
-import com.eramint.locationservice.util.MapUtility.addCustomMarker
-import com.eramint.locationservice.util.MapUtility.animate
-import com.eramint.locationservice.util.MapUtility.animateCamera
-import com.eramint.locationservice.util.MapUtility.defaultMapSettings
-import com.eramint.locationservice.util.MapUtility.getAddress
-import com.eramint.locationservice.util.MapUtility.getBitmapFromVectorDrawable
-import com.eramint.locationservice.util.MapUtility.moveMapCamera
-import com.eramint.locationservice.util.MapUtility.setMapStyle
-import com.eramint.locationservice.util.RouteUtility.directionDataAsync
 import com.eramint.locationservice.util.toGSON
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -40,6 +29,14 @@ import kotlin.random.Random
 
 class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     GoogleMap.OnCameraMoveListener {
+    companion object {
+        const val dropOffViewConstant = 1
+        const val pickupViewConstant = 2
+        const val confirmViewConstant = 3
+        const val padding = 100
+        const val directionUrl = "https://maps.googleapis.com/maps/api/directions/json?"
+
+    }
 
     private val viewModel by viewModels<HomeViewModel>()
     private val driversMap = SparseArray<DriverModel>()
@@ -50,35 +47,33 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     private val geoCoder: Geocoder? by lazy {
         Geocoder(this, Locale("ar"))
     }
-    private val latLngInterpolator: LatLngInterpolator by lazy {
-        LatLngInterpolator.Spherical()
-    }
-    private val primary by lazy{ ContextCompat.getColor(this, R.color.purple_700)}
-    private val second by lazy{ ContextCompat.getColor(this, R.color.purple_200)}
-
-    private val mapAnimator: MapAnimator by lazy { MapAnimator(primary = primary, second = second) }
 
 
     private val userBitMap by lazy {
-        getBitmapFromVectorDrawable(R.drawable.ic_current_location)
+        viewModel.mapUtility.getBitmapFromVectorDrawable(
+            context = this,
+            drawableId = R.drawable.ic_current_location
+        )
     }
     private val dropOffMap by lazy {
-        getBitmapFromVectorDrawable(R.drawable.ic_drop_off_map)
+        viewModel.mapUtility.getBitmapFromVectorDrawable(
+            context = this,
+            drawableId = R.drawable.ic_drop_off_map
+        )
     }
     private val pickUpMap by lazy {
-        getBitmapFromVectorDrawable(R.drawable.ic_pick_up_map)
+        viewModel.mapUtility.getBitmapFromVectorDrawable(
+            context = this,
+            drawableId = R.drawable.ic_pick_up_map
+        )
     }
     private val driverBitMap by lazy {
-        getBitmapFromVectorDrawable(R.drawable.ic_taxi)
+        viewModel.mapUtility.getBitmapFromVectorDrawable(
+            context = this,
+            drawableId = R.drawable.ic_taxi
+        )
     }
-    private val padding = 50
 
-    private val options by lazy {
-        PolylineOptions().apply {
-            color(ContextCompat.getColor(this@HomeActivity, R.color.purple_500))
-            width(10f)
-        }
-    }
 
 
     private var isFirst: Boolean = true
@@ -91,8 +86,13 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
         if (mMap == null) {
             isFirst = true
             mMap = mapFragment?.awaitMap()
-            mMap?.defaultMapSettings(isLocationEnabled = foregroundPermissionApproved())
-            mMap?.setMapStyle(this)
+            mMap?.let { map ->
+                viewModel.mapUtility.defaultMapSettings(
+                    map = map,
+                    isLocationEnabled = foregroundPermissionApproved()
+                )
+                viewModel.mapUtility.setMapStyle(map = map, this)
+            }
             mMap?.setOnCameraIdleListener(this)
             mMap?.setOnCameraMoveListener(this)
         }
@@ -148,12 +148,17 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
             val map = getMap() ?: return@launch
             val lat = map.cameraPosition.target.latitude
             val lon = map.cameraPosition.target.longitude
-            val from = LatLng(lat, lon)
-            map.drawPickUpLocation(location = from)
+            val pickupLocation = LatLng(lat, lon)
+            map.drawPickUpLocation(location = pickupLocation)
 
-            val destination = dropOffMarker?.position ?: return@launch
-            val lineOptions = directionDataAsync(options = options, from = from, to = destination)
-                ?: return@launch
+            val dropOffLocation = dropOffMarker?.position ?: return@launch
+
+            val lineOptions =
+                viewModel.directionRepo.directionDataAsync(
+                    from = pickupLocation,
+                    to = dropOffLocation
+                )
+                    ?: return@launch
             val points = lineOptions.points
             val bounds: LatLngBounds = LatLngBounds.Builder().apply {
                 for (point in points)
@@ -161,7 +166,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
             }.build()
             map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
 
-            mapAnimator.animateRoute(map, points)
+            viewModel.mapAnimator.animateRoute(map, points)
 
 
         }
@@ -188,7 +193,8 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
             val map = getMap() ?: return@launchWhenStarted
             this@HomeActivity.viewModel.locationFlow.map { string -> string?.toGSON() }
                 .collect { location ->
-                    map.animateCamera(
+                    viewModel.mapUtility.animateCamera(
+                        map = map,
                         position = LatLng(
                             location?.toLat ?: return@collect,
                             location.toLon ?: return@collect
@@ -200,14 +206,16 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     }
 
     private fun GoogleMap.drawDropOffLocation(location: LatLng) {
-        dropOffMarker = addCustomMarker(
+        dropOffMarker = viewModel.mapUtility.addCustomMarker(
+            map = this,
             position = location,
             icon = dropOffMap ?: return
         )
     }
 
     private fun GoogleMap.drawPickUpLocation(location: LatLng) {
-        pickUpMarker = addCustomMarker(
+        pickUpMarker = viewModel.mapUtility.addCustomMarker(
+            map = this,
             position = location,
             icon = pickUpMap ?: return
         )
@@ -258,9 +266,11 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
                 driver = driver()
             )
         else {
-            driverModel.driverMarker?.animate(
+            viewModel.mapUtility.animate(
+                marker = driverModel.driverMarker ?: return,
+                markerAnimation = viewModel.markerAnimation,
                 newPosition = locationModel.getToLatLng(),
-                latLngInterpolator = latLngInterpolator
+                latLngInterpolator = viewModel.spherical
             )
             driversMap.get(driverID)?.driver = locationModel
         }
@@ -279,7 +289,8 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     private fun GoogleMap.addDriver(driverID: Int, driver: LocationModel) {
         // check if driver is Draw Before
         if (driversMap.get(driverID) != null) removeDriver(driverID = driverID)
-        val driverMarker = addCustomMarker(
+        val driverMarker = viewModel.mapUtility.addCustomMarker(
+            map = this,
             oldPosition = driver.getFromLatLng(),
             newPosition = driver.getToLatLng(),
             icon = driverBitMap ?: return
@@ -301,7 +312,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
 
     private fun GoogleMap.setupMapCameraView(position: LatLng) {
-        if (isFirst) moveMapCamera(position = position)
+        if (isFirst) viewModel.mapUtility.moveMapCamera(map = this, position = position)
         isFirst = false
     }
 
@@ -337,10 +348,11 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
         if (viewType != pickupViewConstant && viewType != dropOffViewConstant) return
         lifecycleScope.launch(defaultContext) {
             val map = getMap() ?: return@launch
-            val location = geoCoder?.getAddress(
+            val location = viewModel.mapUtility.getAddress(
+                geocoder = geoCoder ?: return@launch,
                 map.cameraPosition.target.latitude,
                 map.cameraPosition.target.longitude
-            ) ?: return@launch
+            )
             viewModel.setPlaceValue(
                 viewType = viewType,
                 location = location
@@ -359,11 +371,6 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
         }
     }
 
-    companion object {
-        const val dropOffViewConstant = 1
-        const val pickupViewConstant = 2
-        const val confirmViewConstant = 3
-    }
 
     override fun onBackPressed() {
         when (viewModel.viewType.value) {
@@ -376,7 +383,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
                 viewModel.viewType.value = pickupViewConstant
                 getCurrentLocation()
                 pickUpMarker?.remove()
-                mapAnimator.clear()
+                viewModel.mapAnimator.clear()
             }
 
             else -> super.onBackPressed()

@@ -1,4 +1,4 @@
-package com.eramint.locationservice.util
+package com.eramint.locationservice.util.mapUtility
 
 import android.animation.TypeEvaluator
 import com.google.android.gms.maps.model.LatLng

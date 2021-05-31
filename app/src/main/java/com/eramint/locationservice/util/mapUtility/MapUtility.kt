@@ -1,4 +1,4 @@
-package com.eramint.locationservice.util
+package com.eramint.locationservice.util.mapUtility
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,37 +11,36 @@ import android.location.Geocoder
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.eramint.locationservice.R
-import com.eramint.locationservice.util.MarkerAnimation.animateMarkerToICS
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-object MapUtility {
-    fun GoogleMap.moveMapCamera(position: LatLng) {
-        Log.e( "moveMapCamera: ", position.toString())
-        moveCamera(
+class MapUtility {
+    fun moveMapCamera(map: GoogleMap, position: LatLng) {
+        Log.e("moveMapCamera: ", position.toString())
+        map.moveCamera(
             CameraUpdateFactory.newCameraPosition(
                 CameraPosition(
                     position,
                     16f,
-                    cameraPosition.tilt,  //use old tilt
-                    cameraPosition.bearing
+                    map.cameraPosition.tilt,  //use old tilt
+                    map.cameraPosition.bearing
                 )
             )
         )
     }
 
-    fun GoogleMap.animateCamera(position: LatLng) {
-        Log.e( "animateCamera: ", position.toString())
-        animateCamera(
+    fun animateCamera(map: GoogleMap, position: LatLng) {
+        Log.e("animateCamera: ", position.toString())
+        map.animateCamera(
             CameraUpdateFactory.newCameraPosition(
                 CameraPosition(
                     position,
                     16f,
-                    cameraPosition.tilt,  //use old tilt
-                    cameraPosition.bearing
+                    map.cameraPosition.tilt,  //use old tilt
+                    map.cameraPosition.bearing
                 )
             )
         )
@@ -52,25 +51,28 @@ object MapUtility {
      *
      */
     @SuppressLint("MissingPermission")
-    fun GoogleMap.defaultMapSettings(isLocationEnabled:Boolean) {
-        uiSettings.isZoomControlsEnabled = false
-        uiSettings.isMapToolbarEnabled = false
-        uiSettings.isRotateGesturesEnabled = true
-        uiSettings.isMapToolbarEnabled = false
-        uiSettings.isTiltGesturesEnabled = true
-        uiSettings.isCompassEnabled = false
-        isBuildingsEnabled = true
-        isMyLocationEnabled = isLocationEnabled
-        uiSettings.isMyLocationButtonEnabled = false
+    fun defaultMapSettings(map: GoogleMap, isLocationEnabled: Boolean) {
+        map.apply {
+            uiSettings.isZoomControlsEnabled = false
+            uiSettings.isMapToolbarEnabled = false
+            uiSettings.isRotateGesturesEnabled = true
+            uiSettings.isMapToolbarEnabled = false
+            uiSettings.isTiltGesturesEnabled = true
+            uiSettings.isCompassEnabled = false
+            isBuildingsEnabled = true
+            isMyLocationEnabled = isLocationEnabled
+            uiSettings.isMyLocationButtonEnabled = false
+        }
 
     }
 
-    fun GoogleMap.addCustomMarker(
+    fun addCustomMarker(
+        map: GoogleMap,
         oldPosition: LatLng,
         newPosition: LatLng,
         icon: Bitmap,
     ): Marker? =
-        addMarker(
+        map.addMarker(
             MarkerOptions()
                 .position(oldPosition)
                 .flat(true)
@@ -78,11 +80,13 @@ object MapUtility {
                 .rotation(bearingBetweenLocations(oldPosition, newPosition))
                 .icon(BitmapDescriptorFactory.fromBitmap(icon))
         )
-    fun GoogleMap.addCustomMarker(
+
+    fun addCustomMarker(
+        map: GoogleMap,
         position: LatLng,
         icon: Bitmap,
     ): Marker? =
-        addMarker(
+        map.addMarker(
             MarkerOptions()
                 .position(position)
                 .flat(true)
@@ -90,16 +94,20 @@ object MapUtility {
                 .icon(BitmapDescriptorFactory.fromBitmap(icon))
         )
 
-    fun Marker.animate(
+    fun animate(
+        marker:Marker,
+        markerAnimation: MarkerAnimation,
         newPosition: LatLng, latLngInterpolator: LatLngInterpolator
-    ) = animateMarkerToICS(
+    ) = markerAnimation.animateMarkerToICS(
+        marker = marker,
+        rotate = bearingBetweenLocations(marker.position, newPosition),
         finalPosition = newPosition,
         latLngInterpolator = latLngInterpolator
     )
 
 
-    fun Context.getBitmapFromVectorDrawable(drawableId: Int): Bitmap? {
-        val drawable: Drawable? = ContextCompat.getDrawable(this, drawableId)
+    fun getBitmapFromVectorDrawable(context: Context, drawableId: Int): Bitmap? {
+        val drawable: Drawable? = ContextCompat.getDrawable(context, drawableId)
         return if (drawable != null) {
             val bitmap = Bitmap.createBitmap(
                 drawable.intrinsicWidth,
@@ -131,12 +139,12 @@ object MapUtility {
         return brng.toFloat() - 90
     }
 
-    fun GoogleMap.setMapStyle(context: Context) {
+    fun setMapStyle(map:GoogleMap,context: Context) {
 
         try {
             // Customize the styling of the base map using a JSON object defined
             // in a raw resource file.
-            val success = setMapStyle(
+            val success = map.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
                     context,
                     R.raw.map_style
@@ -152,13 +160,13 @@ object MapUtility {
         }
     }
 
-    suspend fun Geocoder.getAddress(latitude: Double?, longitude: Double?): String =
+    suspend fun getAddress(geocoder: Geocoder, latitude: Double?, longitude: Double?): String =
         withContext(Dispatchers.IO) {
             try {
                 if (latitude == null || longitude == null)
                     throw Exception("LatLng is Null")
 
-                val addresses: List<Address>? = getFromLocation(latitude, longitude, 1)
+                val addresses: List<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
                 addresses?.let {
                     val returnedAddress: Address = addresses[0]
                     val address = "${returnedAddress.adminArea ?: ""}," +
