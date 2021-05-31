@@ -17,10 +17,14 @@ import com.eramint.app.data.convertToString
 import com.eramint.app.local.DataStore
 import com.eramint.app.local.DataStoreImp.saveLocation
 import com.eramint.app.ui.HomeActivity
+import com.eramint.app.util.Constants.NOTIFICATION_CHANNEL_ID
+import com.eramint.app.util.Constants.NOTIFICATION_ID
+import com.eramint.app.util.Constants.locationInterval
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 
@@ -33,14 +37,15 @@ import java.util.concurrent.TimeUnit
  * versions. Please reference documentation for details.
  */
 class ForegroundOnlyLocationService : Service() {
+    private val TAG = "ForegroundOnlyLocation"
 
     private var dataStore: DataStore? = null
+
     private var configurationChange = false
 
     private var serviceRunningInForeground = false
 
     private val localBinder = LocalBinder()
-
     private val notificationManager: NotificationManager by lazy {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
@@ -69,7 +74,7 @@ class ForegroundOnlyLocationService : Service() {
                 // things a bit and just saving it as a local variable, as we only need it again
                 // if a Notification is created (when the user navigates away from app).
                 val location = locationResult.lastLocation
-                Log.e(TAG, "onLocationResult:$location ")
+                Timber.e(TAG, "onLocationResult:$location ")
                 newLocation = LatLng(location.latitude, location.longitude)
 
                 emitCurrentLocation()
@@ -93,12 +98,12 @@ class ForegroundOnlyLocationService : Service() {
     private var oldLocation: LatLng? = null
 
     override fun onCreate() {
-        Log.d(TAG, "onCreate()")
+        Timber.d(TAG, "onCreate()")
 
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Log.d(TAG, "onStartCommand()")
+        Timber.d(TAG, "onStartCommand()")
         emitCurrentLocation()
         // Tells the system not to recreate the service after it's been killed.
         return START_NOT_STICKY
@@ -122,7 +127,7 @@ class ForegroundOnlyLocationService : Service() {
     }
 
     override fun onBind(intent: Intent): IBinder {
-        Log.d(TAG, "onBind()")
+        Timber.d(TAG, "onBind()")
 
         // MainActivity (client) comes into foreground and binds to service, so the service can
         // become a background services.
@@ -289,10 +294,6 @@ class ForegroundOnlyLocationService : Service() {
     }
 
     companion object {
-        const val locationInterval = 3L
-        private const val TAG = "ForegroundOnlyLocation"
 
-        private const val NOTIFICATION_ID = 12345678
-        public const val NOTIFICATION_CHANNEL_ID = "while_in_use_channel_01"
     }
 }

@@ -8,23 +8,24 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.location.Address
 import android.location.Geocoder
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.eramint.app.R
+import com.eramint.app.util.Constants.cameraZoom
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class MapUtility {
     fun moveMapCamera(map: GoogleMap, position: LatLng) {
-        Log.e("moveMapCamera: ", position.toString())
+        Timber.e("moveMapCamera: $position")
         map.moveCamera(
             CameraUpdateFactory.newCameraPosition(
                 CameraPosition(
                     position,
-                    16f,
+                    cameraZoom,
                     map.cameraPosition.tilt,  //use old tilt
                     map.cameraPosition.bearing
                 )
@@ -33,12 +34,12 @@ class MapUtility {
     }
 
     fun animateCamera(map: GoogleMap, position: LatLng) {
-        Log.e("animateCamera: ", position.toString())
+        Timber.e("animateCamera: $position")
         map.animateCamera(
             CameraUpdateFactory.newCameraPosition(
                 CameraPosition(
                     position,
-                    16f,
+                    cameraZoom,
                     map.cameraPosition.tilt,  //use old tilt
                     map.cameraPosition.bearing
                 )
@@ -95,7 +96,7 @@ class MapUtility {
         )
 
     fun animate(
-        marker:Marker,
+        marker: Marker,
         markerAnimation: MarkerAnimation,
         newPosition: LatLng, latLngInterpolator: LatLngInterpolator
     ) = markerAnimation.animateMarkerToICS(
@@ -139,7 +140,7 @@ class MapUtility {
         return brng.toFloat() - 90
     }
 
-    fun setMapStyle(map:GoogleMap,context: Context) {
+    fun setMapStyle(map: GoogleMap, context: Context) {
 
         try {
             // Customize the styling of the base map using a JSON object defined
@@ -152,10 +153,10 @@ class MapUtility {
             )
 
             if (!success) {
-                Log.e("setMapStyle", " Style parsing failed.")
+                Timber.e("setMapStyle  Style parsing failed.")
             }
         } catch (e: Resources.NotFoundException) {
-            Log.e("setMapStyle", " Error:  ${e.message}")
+            Timber.e("setMapStyle  Error:  ${e.message}")
 
         }
     }

@@ -3,8 +3,9 @@ package com.eramint.app.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.eramint.app.local.DataStore
-import com.eramint.app.ui.HomeActivity.Companion.dropOffViewConstant
-import com.eramint.app.ui.HomeActivity.Companion.pickupViewConstant
+import com.eramint.app.util.Constants.dropOffViewConstant
+import com.eramint.app.util.Constants.pickupViewConstant
+
 import com.eramint.app.util.mapUtility.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

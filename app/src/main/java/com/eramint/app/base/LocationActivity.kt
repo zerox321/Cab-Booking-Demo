@@ -1,6 +1,7 @@
 package com.eramint.app.base
 
 import android.Manifest
+import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -8,22 +9,22 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.eramint.app.BuildConfig
 import com.eramint.app.R
 import com.eramint.app.location.ForegroundOnlyLocationService
 import com.eramint.app.location.GpsLocationReceiver
 import com.eramint.app.location.LocationUtil.showLocationPrompt
+import com.eramint.app.util.Constants.REQUESTFOREGROUNDONLYPERMISSIONSREQUEST_CODE
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
+import timber.log.Timber
 
 
 abstract class LocationActivity : BaseActivity() {
 
     internal val defaultContext = Dispatchers.Main
 
-    private val REQUESTFOREGROUNDONLYPERMISSIONSREQUEST_CODE = 34
     private var foregroundOnlyLocationServiceBound = false
 
     // Provides location updates for while-in-use feature.
@@ -40,7 +41,7 @@ abstract class LocationActivity : BaseActivity() {
 
             if (foregroundPermissionApproved()) {
                 foregroundOnlyLocationService?.subscribeToLocationUpdates(dataStore = dataStore)
-                    ?: Log.d(TAG, "Service Not Bound")
+                    ?: Timber.d(TAG, "Service Not Bound")
             } else {
                 requestForegroundPermissions()
             }
@@ -56,7 +57,15 @@ abstract class LocationActivity : BaseActivity() {
         foregroundOnlyLocationService?.emitCurrentLocation()
     }
 
-    private val br: GpsLocationReceiver by lazy { GpsLocationReceiver() }
+    private val notificationManager: NotificationManager by lazy {
+        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
+    private val br: GpsLocationReceiver by lazy {
+        GpsLocationReceiver(
+            notificationManager = notificationManager,
+            locationManger = locationManger,
+        )
+    }
     private val filter: IntentFilter by lazy { IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,7 +136,7 @@ abstract class LocationActivity : BaseActivity() {
                 }
                 .show()
         } else {
-            Log.d(TAG, "Request foreground only permission")
+            Timber.d(TAG, "Request foreground only permission")
             ActivityCompat.requestPermissions(
                 this@LocationActivity,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -143,14 +152,14 @@ abstract class LocationActivity : BaseActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d(TAG, "onRequestPermissionResult")
+        Timber.d(TAG, "onRequestPermissionResult")
 
         when (requestCode) {
             REQUESTFOREGROUNDONLYPERMISSIONSREQUEST_CODE -> when {
                 grantResults.isEmpty() ->
                     // If user interaction was interrupted, the permission request
                     // is cancelled and you receive empty arrays.
-                    Log.d(TAG, "User interaction was cancelled.")
+                    Timber.d(TAG, "User interaction was cancelled.")
                 grantResults[0] == PackageManager.PERMISSION_GRANTED ->
                     // Permission was granted.
                     foregroundOnlyLocationService?.subscribeToLocationUpdates(dataStore)

@@ -4,11 +4,12 @@ import android.util.Log
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
-import com.eramint.app.ui.HomeActivity.Companion.directionUrl
+import com.eramint.app.util.Constants.directionUrl
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.net.URL
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -35,7 +36,7 @@ class DirectionRepo(private val key: String, private val options : PolylineOptio
                 to.latitude,
                 to.longitude
             )
-            Log.e("directionDataAsync", "url:  url $url")
+            Timber.e("directionDataAsyncurl:  url $url")
 
             try {
                 val result = URL(url).readText()

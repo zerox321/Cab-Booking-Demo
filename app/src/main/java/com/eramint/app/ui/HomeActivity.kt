@@ -2,7 +2,6 @@ package com.eramint.app.ui
 
 import android.location.Geocoder
 import android.os.Bundle
-import android.util.Log
 import android.util.SparseArray
 import androidx.activity.viewModels
 import androidx.core.util.forEach
@@ -10,9 +9,13 @@ import androidx.lifecycle.lifecycleScope
 import com.eramint.app.R
 import com.eramint.app.base.LocationActivity
 import com.eramint.app.data.DriverModel
+import com.eramint.app.data.LocationModel
+import com.eramint.app.data.toGSON
 import com.eramint.app.databinding.ActivityHomeBinding
-import com.eramint.app.util.LocationModel
-import com.eramint.app.util.toGSON
+import com.eramint.app.util.Constants.confirmViewConstant
+import com.eramint.app.util.Constants.dropOffViewConstant
+import com.eramint.app.util.Constants.padding
+import com.eramint.app.util.Constants.pickupViewConstant
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -22,20 +25,14 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import kotlin.random.Random
 
 
 class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     GoogleMap.OnCameraMoveListener {
-    companion object {
-        const val dropOffViewConstant = 1
-        const val pickupViewConstant = 2
-        const val confirmViewConstant = 3
-        const val padding = 100
-        const val directionUrl = "https://maps.googleapis.com/maps/api/directions/json?"
 
-    }
 
     private val viewModel by viewModels<HomeViewModel>()
     private val driversMap = SparseArray<DriverModel>()
@@ -234,7 +231,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     }
 
     private suspend fun onNewLocation(locationModel: LocationModel) {
-        Log.e(TAG, "onNewLocation:  $locationModel")
+        Timber.tag(TAG).e("onNewLocation:  $locationModel")
         val oldPosition = locationModel.getFromLatLng()
 
         val newPosition = locationModel.getToLatLng()
@@ -314,11 +311,11 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
     //Todo remove Driver ->driverID
     private fun removeDriver(driverID: Int) {
-        Log.e(TAG, "removeDriver: driverID $driverID")
+        Timber.tag(TAG).e("removeDriver: driverID $driverID")
         val driverModel: DriverModel = driversMap.get(driverID) ?: return
         driverModel.driverMarker?.remove()
         driversMap.remove(driverID)
-        Log.e(TAG, "removeDriver: driverID $driverID removed Successfully")
+        Timber.tag(TAG).e("removeDriver: driverID $driverID removed Successfully")
     }
 
     private fun clearMapDrivers() {

@@ -8,7 +8,7 @@ import android.os.SystemClock
 import android.util.Property
 import android.view.animation.Interpolator
 import android.view.animation.LinearInterpolator
-import com.eramint.app.location.ForegroundOnlyLocationService
+import com.eramint.app.util.Constants.locationInterval
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import java.util.concurrent.TimeUnit
@@ -23,7 +23,7 @@ class MarkerAnimation {
         val start = SystemClock.uptimeMillis()
         val startRotation = rotation
         val duration: Long =
-            TimeUnit.SECONDS.toMillis(ForegroundOnlyLocationService.locationInterval)
+            TimeUnit.SECONDS.toMillis(locationInterval)
         val interpolator: Interpolator = LinearInterpolator()
         handler.post(object : Runnable {
             override fun run() {
@@ -60,8 +60,7 @@ class MarkerAnimation {
             )
         val animator =
             ObjectAnimator.ofObject(marker, property, typeEvaluator, finalPosition)
-        animator.duration =
-            TimeUnit.SECONDS.toMillis(ForegroundOnlyLocationService.locationInterval)
+        animator.duration = TimeUnit.SECONDS.toMillis(locationInterval)
         animator.start()
     }
 }

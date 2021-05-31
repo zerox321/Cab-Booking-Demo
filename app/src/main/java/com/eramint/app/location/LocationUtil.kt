@@ -9,6 +9,7 @@ import android.content.IntentSender.SendIntentException
 import androidx.core.app.NotificationCompat
 import com.eramint.app.R
 import com.eramint.app.ui.HomeActivity
+import com.eramint.app.util.Constants.NOTIFICATION_CHANNEL_ID
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -56,7 +57,7 @@ object LocationUtil {
             PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
         val notificationCompatBuilder = NotificationCompat.Builder(
             context.applicationContext,
-            ForegroundOnlyLocationService.NOTIFICATION_CHANNEL_ID
+            NOTIFICATION_CHANNEL_ID
         ).apply {
             setStyle(bigTextStyle)
             setContentTitle(titleText)
