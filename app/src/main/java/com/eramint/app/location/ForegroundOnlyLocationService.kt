@@ -12,11 +12,11 @@ import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.eramint.app.R
+import com.eramint.app.data.LocationModel
+import com.eramint.app.data.convertToString
 import com.eramint.app.local.DataStore
 import com.eramint.app.local.DataStoreImp.saveLocation
 import com.eramint.app.ui.HomeActivity
-import com.eramint.app.util.LocationModel
-import com.eramint.app.util.convertToString
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.GlobalScope
@@ -232,7 +232,6 @@ class ForegroundOnlyLocationService : Service() {
             val notificationChannel = NotificationChannel(
                 NOTIFICATION_CHANNEL_ID, titleText, NotificationManager.IMPORTANCE_DEFAULT
             )
-
             // Adds NotificationChannel to system. Attempting to create an
             // existing notification channel with its original values performs
             // no operation, so it's safe to perform the below sequence.
