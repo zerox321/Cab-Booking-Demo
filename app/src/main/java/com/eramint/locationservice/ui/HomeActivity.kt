@@ -43,6 +43,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     private val mapFragment: SupportMapFragment? by lazy {
         supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
     }
+
     private val geoCoder: Geocoder? by lazy {
         Geocoder(this, Locale("ar"))
     }
@@ -129,19 +130,23 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
             pickupView = pickupViewConstant
             confirmView = confirmViewConstant
 
+            // Todo attach drop off View click Listener
             dropOffHome.run {
                 backIv.setOnClickListener { onBackPressed() }
                 dropOffBT.setOnClickListener { dropOffClick() }
                 currentLocationFab.setOnClickListener { getCurrentLocation() }
             }
-            confirmHome.run {
-                backIv.setOnClickListener { onBackPressed() }
-            }
+            // Todo attach pick up View click Listener
+
             pickUpHome.run {
                 backIv.setOnClickListener { onBackPressed() }
                 pickUpBT.setOnClickListener { pickUpClick() }
                 currentLocationFab.setOnClickListener { getCurrentLocation() }
 
+            }
+            // Todo attach confirm View click Listener
+            confirmHome.run {
+                backIv.setOnClickListener { onBackPressed() }
             }
 
         }
@@ -315,7 +320,11 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
         driversMap.remove(driverID)
         Log.e(TAG, "removeDriver: driverID $driverID removed Successfully")
     }
-
+    private fun clearMapDrivers() {
+        driversMap.forEach { _, item ->
+            removeDriver(driverID = item.driverID)
+        }
+    }
 
     private fun GoogleMap.setupMapCameraView(position: LatLng) {
         if (isFirst) viewModel.mapUtility.moveMapCamera(map = this, position = position)
@@ -371,25 +380,22 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
         viewModel.setIsCameraMove(value = true)
     }
 
-    private fun clearMapDrivers() {
-        driversMap.forEach { _, item ->
-            removeDriver(driverID = item.driverID)
-        }
-    }
+
 
 
     override fun onBackPressed() {
         when (viewModel.viewType.value) {
-            pickupViewConstant -> {
-                viewModel.viewType.value = dropOffViewConstant
-                getCurrentLocation()
-                dropOffMarker?.remove()
-            }
             confirmViewConstant -> {
                 viewModel.viewType.value = pickupViewConstant
                 getCurrentLocation()
                 pickUpMarker?.remove()
                 viewModel.mapAnimator.clear()
+            }
+
+            pickupViewConstant -> {
+                viewModel.viewType.value = dropOffViewConstant
+                getCurrentLocation()
+                dropOffMarker?.remove()
             }
 
             else -> super.onBackPressed()

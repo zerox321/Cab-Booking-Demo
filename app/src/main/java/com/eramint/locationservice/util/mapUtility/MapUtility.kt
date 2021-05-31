@@ -55,7 +55,7 @@ class MapUtility {
         map.apply {
             uiSettings.isZoomControlsEnabled = false
             uiSettings.isMapToolbarEnabled = false
-            uiSettings.isRotateGesturesEnabled = true
+            uiSettings.isRotateGesturesEnabled = false
             uiSettings.isMapToolbarEnabled = false
             uiSettings.isTiltGesturesEnabled = true
             uiSettings.isCompassEnabled = false

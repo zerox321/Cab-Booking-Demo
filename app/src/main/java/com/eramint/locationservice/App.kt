@@ -10,6 +10,5 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         MapsInitializer.initialize(baseContext)
-//        Places.initialize(baseContext, "AIzaSyBG7Tdt8ZLceXZOle3-7ZZktgsyYcU2bWw")
     }
 }

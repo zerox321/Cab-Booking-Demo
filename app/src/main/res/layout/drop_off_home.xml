@@ -106,14 +106,11 @@
                 android:textSize="@dimen/mainFont"
                 app:drawableStartCompat="@drawable/ic_dot"
                 tools:text="title" />
-
-
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/drop_off_BT"
             style="@style/rounded_button_style"
-
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
