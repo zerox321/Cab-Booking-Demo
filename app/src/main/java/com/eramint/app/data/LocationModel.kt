@@ -1,4 +1,4 @@
-package com.eramint.app.util
+package com.eramint.app.data
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson

@@ -98,11 +98,12 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
         return mMap
     }
 
+    private fun getID(): Int = Random.nextInt(0, 10)
     private fun driver() = LocationModel(
-        fromLat = 30.7904085,
-        fromLon = 31.0111404,
-        toLat = 30.7904085 - Random.nextDouble(0.0, 0.01),
-        toLon = 31.0111404 + Random.nextDouble(0.0, 0.01)
+        fromLat = 30.7904085 - Random.nextDouble(0.001, 0.01),
+        fromLon = 31.0111404 - Random.nextDouble(0.001, 0.01),
+        toLat = 30.7904085 + Random.nextDouble(0.001, 0.01),
+        toLon = 31.0111404 + Random.nextDouble(0.001, 0.01)
     )
 
     private val binding: ActivityHomeBinding by binding(R.layout.activity_home)
@@ -148,7 +149,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
             confirmHome.run {
                 backIv.setOnClickListener { onBackPressed() }
             }
-
+            test.setOnClickListener { updateClick() }
         }
     }
 
@@ -260,9 +261,8 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     private fun updateClick() {
         lifecycleScope.launch(defaultContext) {
             val map = getMap() ?: return@launch
-            val driverID = 1
             map.updateDriver(
-                driverID = driverID,
+                driverID = getID(),
                 locationModel = driver()
             )
 
@@ -320,6 +320,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
         driversMap.remove(driverID)
         Log.e(TAG, "removeDriver: driverID $driverID removed Successfully")
     }
+
     private fun clearMapDrivers() {
         driversMap.forEach { _, item ->
             removeDriver(driverID = item.driverID)
@@ -379,8 +380,6 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
         viewModel.setIsCoveredArea(value = false)
         viewModel.setIsCameraMove(value = true)
     }
-
-
 
 
     override fun onBackPressed() {

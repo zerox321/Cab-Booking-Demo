@@ -60,6 +60,16 @@
             android:visibility="@{viewModel.viewType==confirmView?View.VISIBLE:View.GONE}"
             app:viewModel="@{viewModel}"
             tools:visibility="gone" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/key_lines"
+            android:visibility="gone"
+            app:fabSize="mini"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 
