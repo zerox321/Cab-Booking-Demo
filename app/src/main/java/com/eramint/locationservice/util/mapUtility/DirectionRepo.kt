@@ -13,7 +13,7 @@ import java.net.URL
 import java.util.logging.Level
 import java.util.logging.Logger
 
-class DirectionRepo(private val key: String, private   val options : PolylineOptions) {
+class DirectionRepo(private val key: String, private val options : PolylineOptions) {
 
     private fun getDirectionUrl(
         currentLat: Double,
