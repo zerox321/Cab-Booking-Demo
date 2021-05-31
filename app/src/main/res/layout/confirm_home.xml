@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.eramint.locationservice.ui.HomeViewModel" />
+            type="com.eramint.app.ui.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
