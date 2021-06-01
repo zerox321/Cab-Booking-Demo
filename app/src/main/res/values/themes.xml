@@ -25,4 +25,26 @@
         <item name="android:layout_margin">@dimen/key_lines</item>
         <item name="cornerRadius">@dimen/key_linesV</item>
     </style>
+
+    <style name="offer_name_style" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/purple_500</item>
+        <item name="android:textSize">@dimen/mainFont</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:padding">@dimen/key_linesV</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="offer_content_style" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">@dimen/secondFont</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:paddingStart">@dimen/key_linesV</item>
+        <item name="android:paddingEnd">@dimen/key_linesV</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="offer_description_style" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">@dimen/secondFont</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:padding">@dimen/key_linesV</item>
+        <item name="android:singleLine">true</item>
+    </style>
 </resources>

@@ -39,6 +39,7 @@ class HomeViewModel @Inject constructor(
     val isLocationEnabled = MutableLiveData<Boolean>(true)
 
 
+    val isSelected = MutableLiveData<Boolean>()
     val isCameraMoving = MutableLiveData<Boolean>()
     fun setIsCameraMove(value: Boolean) {
         isCameraMoving.value = value

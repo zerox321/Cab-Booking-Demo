@@ -13,6 +13,7 @@ import com.eramint.app.data.LocationModel
 import com.eramint.app.data.toGSON
 import com.eramint.app.databinding.ActivityHomeBinding
 import com.eramint.app.location.LocationUtil.showLocationPrompt
+import com.eramint.app.ui.adapter.RidesAdapter
 import com.eramint.app.util.Constants.confirmViewConstant
 import com.eramint.app.util.Constants.dropOffViewConstant
 import com.eramint.app.util.Constants.padding
@@ -32,8 +33,9 @@ import kotlin.random.Random
 
 
 class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
-    GoogleMap.OnCameraMoveListener {
+    GoogleMap.OnCameraMoveListener, RidesAdapter.ClickListener {
 
+    private val ridesAdapter by lazy { RidesAdapter(this).apply { submitList(listOf("", "")) } }
 
     private val viewModel by viewModels<HomeViewModel>()
     private val driversMap = SparseArray<DriverModel>()
@@ -147,6 +149,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
             }
             // Todo attach confirm View click Listener
             confirmHome.run {
+                offersRV.adapter = ridesAdapter
                 backIv.setOnClickListener { onBackPressed() }
             }
             test.setOnClickListener { updateClick() }
@@ -171,6 +174,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
                     to = dropOffLocation
                 )
                     ?: return@launch
+            if (viewModel.viewType.value != confirmViewConstant) return@launch
             val points = lineOptions.points
             val bounds: LatLngBounds = LatLngBounds.Builder().apply {
                 for (point in points)
@@ -389,6 +393,8 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
                 getCurrentLocation()
                 pickUpMarker?.remove()
                 viewModel.mapAnimator.clear()
+                viewModel.isSelected.value = false
+
             }
 
             pickupViewConstant -> {
@@ -403,6 +409,10 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
     override fun onLocationChangeAbstraction(locationValue: Boolean) {
         viewModel.isLocationEnabled.value = locationValue
+    }
+
+    override fun onItemClick() {
+        viewModel.isSelected.value = true
     }
 
 }

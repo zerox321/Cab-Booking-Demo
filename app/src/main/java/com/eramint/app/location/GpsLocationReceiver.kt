@@ -9,12 +9,10 @@ import timber.log.Timber
 class GpsLocationReceiver(
     private val locationManger: LocationManager,
     private val locationChangeInterface: LocationChangeInterface
-) :
-    BroadcastReceiver() {
+) : BroadcastReceiver() {
     private val TAG = "LocationProviderChanged"
 
 
-    // START OF onReceive
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action ?: return
         Timber.tag(TAG).e("onReceive: $action")

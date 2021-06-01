@@ -23,12 +23,66 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/key_lines"
+            android:animateLayoutChanges="true"
             android:elevation="@dimen/key_linesV"
             android:padding="@dimen/key_linesV"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_back" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_confirm"
+            android:animateLayoutChanges="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/whereTv" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/whereTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:paddingStart="@dimen/key_linesV"
+            android:paddingEnd="@dimen/key_linesV"
+            android:paddingBottom="@dimen/key_linesV"
+            android:paddingTop="@dimen/key_lines"
+            android:text="@string/select_your_ride"
+            android:textColor="@color/black"
+            android:textSize="@dimen/mainFont"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/offersRV"
+            app:layout_constraintEnd_toEndOf="@+id/offersRV"
+            app:layout_constraintStart_toStartOf="@+id/offersRV" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/offersRV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/key_lines"
+            android:layout_marginEnd="@dimen/key_lines"
+            android:orientation="vertical"
+            app:bindListDecoration="@{true}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/drop_off_BT"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:itemCount="3"
+            tools:listitem="@layout/ride_row_item" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/drop_off_BT"
+            style="@style/rounded_button_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:text="@string/select"
+            android:visibility="@{viewModel.isSelected?View.VISIBLE:View.GONE}"
+            app:backgroundTint="@color/purple_500"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

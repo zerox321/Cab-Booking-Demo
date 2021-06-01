@@ -41,8 +41,7 @@ abstract class LocationActivity : BaseActivity(), LocationChangeInterface {
             foregroundOnlyLocationServiceBound = true
 
             if (foregroundPermissionApproved()) {
-                foregroundOnlyLocationService?.subscribeToLocationUpdates(dataStore = dataStore)
-                    ?: Timber.d(TAG, "Service Not Bound")
+                foregroundOnlyLocationService?.subscribeToLocationUpdates(dataStore = dataStore) ?: Timber.d(TAG, "Service Not Bound")
             } else {
                 requestForegroundPermissions()
             }
