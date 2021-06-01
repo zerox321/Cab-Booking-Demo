@@ -1,5 +1,6 @@
-package com.eramint.app.ui
+package com.eramint.app.ui.bookTrip
 
+import android.content.Intent
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.SparseArray
@@ -11,9 +12,11 @@ import com.eramint.app.base.LocationActivity
 import com.eramint.app.data.DriverModel
 import com.eramint.app.data.LocationModel
 import com.eramint.app.data.toGSON
-import com.eramint.app.databinding.ActivityHomeBinding
-import com.eramint.app.location.LocationUtil.showLocationPrompt
-import com.eramint.app.ui.adapter.RidesAdapter
+import com.eramint.app.databinding.ActivityBookTripBinding
+import com.eramint.app.ui.bookTrip.adapter.RidesAdapter
+import com.eramint.app.ui.inProgressTrip.InProgressModel
+import com.eramint.app.ui.inProgressTrip.InProgressTripActivity
+import com.eramint.app.util.Constants
 import com.eramint.app.util.Constants.confirmViewConstant
 import com.eramint.app.util.Constants.dropOffViewConstant
 import com.eramint.app.util.Constants.padding
@@ -32,29 +35,29 @@ import java.util.*
 import kotlin.random.Random
 
 
-class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
+class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     GoogleMap.OnCameraMoveListener, RidesAdapter.ClickListener {
     private val rides = listOf("", "")
     private val ridesAdapter by lazy { RidesAdapter(this) }
 
-    private val viewModel by viewModels<HomeViewModel>()
+    private val viewModel by viewModels<BookTripViewModel>()
     private val driversMap = SparseArray<DriverModel>()
 
     private val mapFragment: SupportMapFragment? by lazy {
-        supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
+        supportFragmentManager.findFragmentById(R.id.bookTripGoogleMap) as SupportMapFragment?
     }
 
     private val geoCoder: Geocoder? by lazy {
-        Geocoder(this, Locale("ar"))
+        Geocoder(this, Locale(getString(R.string.lang_key)))
     }
 
 
-    private val userBitMap by lazy {
-        viewModel.mapUtility.getBitmapFromVectorDrawable(
-            context = this,
-            drawableId = R.drawable.ic_current_location
-        )
-    }
+    //    private val userBitMap by lazy {
+//        viewModel.mapUtility.getBitmapFromVectorDrawable(
+//            context = this,
+//            drawableId = R.drawable.ic_current_location
+//        )
+//    }
     private val dropOffMap by lazy {
         viewModel.mapUtility.getBitmapFromVectorDrawable(
             context = this,
@@ -106,7 +109,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
         toLon = 31.0111404 + Random.nextDouble(0.001, 0.01)
     )
 
-    private val binding: ActivityHomeBinding by binding(R.layout.activity_home)
+    private val binding: ActivityBookTripBinding by binding(R.layout.activity_book_trip)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,32 +128,63 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
     private fun bindView() {
         binding.run {
-            viewModel = this@HomeActivity.viewModel
+            viewModel = this@BookTripActivity.viewModel
 
             dropOffView = dropOffViewConstant
             pickupView = pickupViewConstant
             confirmView = confirmViewConstant
-            noLocationCardView.setOnClickListener {
-                showLocationPrompt()
+
+            // Todo Location Disabled View click Listener
+            noLocationView.run {
+                noLocationCardView.setOnClickListener {
+                    this@BookTripActivity.viewModel.mapUtility.showLocationPrompt(this@BookTripActivity)
+                }
             }
+
             // Todo attach drop off View click Listener
             dropOffHome.run {
                 backIv.setOnClickListener { onBackPressed() }
                 dropOffBT.setOnClickListener { dropOffClick() }
                 currentLocationFab.setOnClickListener { getCurrentLocation() }
             }
-            // Todo attach pick up View click Listener
 
+            // Todo attach pick up View click Listener
             pickUpHome.run {
                 backIv.setOnClickListener { onBackPressed() }
                 pickUpBT.setOnClickListener { pickUpClick() }
                 currentLocationFab.setOnClickListener { getCurrentLocation() }
-
             }
+
             // Todo attach confirm View click Listener
             confirmHome.run {
                 offersRV.adapter = ridesAdapter
                 backIv.setOnClickListener { onBackPressed() }
+                selectBT.setOnClickListener {
+                    val dropOffLocation = dropOffMarker?.position ?: return@setOnClickListener
+                    val pickupLocation = pickUpMarker?.position ?: return@setOnClickListener
+
+                    val model = InProgressModel(
+                        dropLat = dropOffLocation.latitude,
+                        dropLon = dropOffLocation.longitude,
+                        dropName = this@BookTripActivity.viewModel.dropOffPlaceTitleText.value
+                            ?: "",
+
+                        pickLat = pickupLocation.latitude,
+                        pickLon = pickupLocation.longitude,
+                        pickName = this@BookTripActivity.viewModel.pickupPlaceTitleText.value ?: "",
+
+                        tripID = 1,
+                        tripState = Constants.driverIsComingConstant,
+                        price = "200 EGP",
+                        rideType = "Go اوفر "
+                    )
+                    val intent =
+                        Intent(this@BookTripActivity, InProgressTripActivity::class.java).apply {
+                            putExtra("item", model)
+                        }
+                    startActivity(intent)
+//                    this@BookTripActivity.finish()
+                }
             }
         }
     }
@@ -158,7 +192,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     private fun pickUpClick() {
         ridesAdapter.submitList(rides)
 
-        this@HomeActivity.viewModel.viewType.value = confirmViewConstant
+        this@BookTripActivity.viewModel.viewType.value = confirmViewConstant
 
         lifecycleScope.launch(defaultContext) {
 
@@ -191,14 +225,14 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
 
     private fun dropOffClick() {
-        this@HomeActivity.viewModel.viewType.value = pickupViewConstant
+        this@BookTripActivity.viewModel.viewType.value = pickupViewConstant
 
         lifecycleScope.launch(defaultContext) {
             val map = getMap() ?: return@launch
             val lat = map.cameraPosition.target.latitude
             val lon = map.cameraPosition.target.longitude
 
-            this@HomeActivity.viewModel.clearPickupPlaceTitleText()
+            this@BookTripActivity.viewModel.clearPickupPlaceTitleText()
             getCurrentLocation()
             map.drawDropOffLocation(location = LatLng(lat, lon))
         }
@@ -208,7 +242,7 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     private fun getCurrentLocation() {
         lifecycleScope.launchWhenStarted {
             val map = getMap() ?: return@launchWhenStarted
-            this@HomeActivity.viewModel.locationFlow.map { string -> string?.toGSON() }
+            this@BookTripActivity.viewModel.locationFlow.map { string -> string?.toGSON() }
                 .collect { location ->
                     viewModel.mapUtility.animateCamera(
                         map = map,
@@ -240,14 +274,14 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
     private suspend fun onNewLocation(locationModel: LocationModel) {
         Timber.tag(TAG).e("onNewLocation:  $locationModel")
-        val oldPosition = locationModel.getFromLatLng()
+//        val oldPosition = locationModel.getFromLatLng()
 
         val newPosition = locationModel.getToLatLng()
 
         val map = getMap() ?: return
 
         // Todo move Map Camera
-        map.setupMapCameraView(position = oldPosition)
+        map.setupMapCameraView(position = newPosition)
 //        // Todo add user location marker
 //        if (userMarker == null)
 //            userMarker = map.addCustomMarker(

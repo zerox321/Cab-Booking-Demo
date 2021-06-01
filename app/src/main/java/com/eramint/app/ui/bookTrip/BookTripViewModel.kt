@@ -1,4 +1,4 @@
-package com.eramint.app.ui
+package com.eramint.app.ui.bookTrip
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class BookTripViewModel @Inject constructor(
     private val dataStore: DataStore,
     val spherical: Spherical,
     val markerAnimation: MarkerAnimation,

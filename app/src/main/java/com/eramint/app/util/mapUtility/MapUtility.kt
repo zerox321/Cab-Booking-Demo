@@ -1,7 +1,9 @@
 package com.eramint.app.util.mapUtility
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.IntentSender
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -11,14 +13,40 @@ import android.location.Geocoder
 import androidx.core.content.ContextCompat
 import com.eramint.app.R
 import com.eramint.app.util.Constants.cameraZoom
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
+import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class MapUtility {
+
+    fun showLocationPrompt(activity: Activity) {
+        val locationRequest = LocationRequest.create()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        val result =
+            LocationServices.getSettingsClient(activity).checkLocationSettings(builder.build())
+        result.addOnCompleteListener { task: Task<LocationSettingsResponse?> ->
+            try {
+                val response = task.getResult(ApiException::class.java)
+            } catch (e: ApiException) {
+                if (e.statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED && e is ResolvableApiException) {
+                    try {
+                        e.startResolutionForResult(activity, LocationRequest.PRIORITY_HIGH_ACCURACY)
+                    } catch (sendIntentException: IntentSender.SendIntentException) {
+                        sendIntentException.printStackTrace()
+                    }
+                }
+                e.printStackTrace()
+            }
+        }
+    }
     fun moveMapCamera(map: GoogleMap, position: LatLng) {
         Timber.e("moveMapCamera: $position")
         map.moveCamera(

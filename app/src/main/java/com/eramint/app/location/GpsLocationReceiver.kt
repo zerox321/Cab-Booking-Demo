@@ -6,10 +6,12 @@ import android.content.Intent
 import android.location.LocationManager
 import timber.log.Timber
 
-class GpsLocationReceiver(
+class GpsLocationReceiver constructor(
     private val locationManger: LocationManager,
     private val locationChangeInterface: LocationChangeInterface
 ) : BroadcastReceiver() {
+
+
     private val TAG = "LocationProviderChanged"
 
 

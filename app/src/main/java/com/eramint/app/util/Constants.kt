@@ -12,6 +12,11 @@ object Constants {
     const val pickupViewConstant = 2
     const val confirmViewConstant = 3
 
+
+    const val driverIsComingConstant = 1
+    const val driverArrivedConstant = 2
+    const val tripFinishedConstant = 3
+
     const val padding = 200
     const val cameraZoom = 16f
     const val directionUrl = "https://maps.googleapis.com/maps/api/directions/json?"

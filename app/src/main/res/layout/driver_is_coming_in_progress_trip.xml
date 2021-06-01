@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.eramint.app.ui.inProgressTrip.InProgressTripViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        tools:background="@color/grey">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/backIv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/key_lines"
+            android:elevation="@dimen/key_linesV"
+            android:padding="@dimen/key_linesV"
+            android:rotationY="180"
+            app:layout_constraintBottom_toBottomOf="@+id/tripDetails"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tripDetails"
+            app:srcCompat="@drawable/ic_redirection" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tripDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/key_lines"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/bg_trip_container"
+            android:padding="@dimen/key_linesV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/backIv"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/pickUpDot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/key_linesV"
+                app:layout_constraintBottom_toBottomOf="@id/pickupTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/pickupTv"
+                app:srcCompat="@drawable/ic_active_state" />
+
+            <View
+                android:id="@+id/linkView"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@color/purple_alpha"
+                app:layout_constraintBottom_toTopOf="@+id/dropOffDot"
+                app:layout_constraintEnd_toEndOf="@+id/pickUpDot"
+                app:layout_constraintStart_toStartOf="@+id/pickUpDot"
+                app:layout_constraintTop_toBottomOf="@+id/pickUpDot" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/dropOffDot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/key_linesV"
+                app:layout_constraintBottom_toBottomOf="@id/dropOffTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/dropOffTv"
+                app:srcCompat="@drawable/ic_in_active_state" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/pickupTv"
+                style="@style/in_progress_container_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.trip.pickName}"
+                android:textColor="@color/purple_500"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/pickUpDot"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="pick up Location Name" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/line_divider"
+                android:layout_width="0dp"
+                android:layout_margin="@dimen/key_linesV"
+                android:layout_height="4dp"
+                app:layout_constraintEnd_toEndOf="@id/pickupTv"
+                app:layout_constraintStart_toStartOf="@id/pickupTv"
+                app:layout_constraintTop_toBottomOf="@id/pickupTv"
+                app:srcCompat="@drawable/ic_strip_line" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/dropOffTv"
+                style="@style/in_progress_container_style"
+                android:layout_width="0dp"
+                android:layout_marginTop="@dimen/key_linesV"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.trip.dropName}"
+                android:textColor="@color/grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/dropOffDot"
+                app:layout_constraintTop_toBottomOf="@id/line_divider"
+                tools:text="drop off Location Name" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
+

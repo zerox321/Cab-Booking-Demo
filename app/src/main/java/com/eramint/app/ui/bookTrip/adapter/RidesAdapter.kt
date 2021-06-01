@@ -1,4 +1,4 @@
-package com.eramint.app.ui.adapter
+package com.eramint.app.ui.bookTrip.adapter
 
 import android.view.LayoutInflater
 import android.view.View

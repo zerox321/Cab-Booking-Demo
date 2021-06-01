@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.eramint.app.ui.HomeViewModel" />
+            type="com.eramint.app.ui.bookTrip.BookTripViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,13 +65,13 @@
             android:layout_marginStart="@dimen/key_lines"
             android:layout_marginEnd="@dimen/key_lines"
             android:layout_marginBottom="@dimen/key_linesV"
-            android:overScrollMode="never"
             android:orientation="vertical"
-            app:spanCount="2"
+            android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/select_BT"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:spanCount="2"
             tools:itemCount="2"
             tools:listitem="@layout/ride_row_item" />
 

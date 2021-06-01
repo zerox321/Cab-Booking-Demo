@@ -9,14 +9,13 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.eramint.app.R
 import com.eramint.app.data.LocationModel
 import com.eramint.app.data.convertToString
 import com.eramint.app.local.DataStore
 import com.eramint.app.local.DataStoreImp.saveLocation
-import com.eramint.app.ui.HomeActivity
+import com.eramint.app.ui.bookTrip.BookTripActivity
 import com.eramint.app.util.Constants.NOTIFICATION_CHANNEL_ID
 import com.eramint.app.util.Constants.NOTIFICATION_ID
 import com.eramint.app.util.Constants.locationInterval
@@ -248,7 +247,7 @@ class ForegroundOnlyLocationService : Service() {
             .setBigContentTitle(titleText)
 
         // 3. Set up main Intent/Pending Intents for notification.
-        val launchActivityIntent = Intent(this, HomeActivity::class.java)
+        val launchActivityIntent = Intent(this, BookTripActivity::class.java)
 
 
         val activityPendingIntent = PendingIntent.getActivity(

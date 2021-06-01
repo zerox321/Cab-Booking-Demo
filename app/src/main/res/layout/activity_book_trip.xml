@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.eramint.app.ui.HomeViewModel" />
+            type="com.eramint.app.ui.bookTrip.BookTripViewModel" />
 
         <variable
             name="dropOffView"
@@ -30,63 +30,46 @@
         android:layout_height="match_parent">
 
         <fragment
-            android:id="@+id/map"
+            android:id="@+id/bookTripGoogleMap"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context=".ui.home.HomeFragment" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <include
             android:id="@+id/drop_off_home"
-            layout="@layout/drop_off_home"
+            layout="@layout/drop_off_book_trip"
             android:visibility="@{viewModel.viewType==dropOffView?View.VISIBLE:View.GONE}"
             app:viewModel="@{viewModel}"
             tools:visibility="visible" />
 
         <include
             android:id="@+id/pick_up_home"
-            layout="@layout/pick_up_home"
+            layout="@layout/pick_up_book_trip"
             android:visibility="@{viewModel.viewType==pickupView?View.VISIBLE:View.GONE}"
             app:viewModel="@{viewModel}"
             tools:visibility="gone" />
 
         <include
             android:id="@+id/confirm_home"
-            layout="@layout/confirm_home"
+            layout="@layout/confirm_book_trip"
             android:visibility="@{viewModel.viewType==confirmView?View.VISIBLE:View.GONE}"
             app:viewModel="@{viewModel}"
             tools:visibility="gone" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/noLocationCardView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="@dimen/key_lines"
-            android:animateLayoutChanges="true"
+        <include
+            android:id="@+id/noLocationView"
+            layout="@layout/location_disabled_view"
             android:visibility="@{viewModel.isLocationEnabled()?View.GONE:View.VISIBLE}"
-            app:cardCornerRadius="@dimen/key_linesV"
-            app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="false"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawablePadding="@dimen/key_linesV"
-                android:gravity="center_vertical"
-                android:padding="@dimen/key_lines"
-                android:text="@string/location_disabled_content"
-                android:textSize="@dimen/mainFont"
-                app:drawableStartCompat="@drawable/ic_baseline_location_off_24" />
-        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
