@@ -3,71 +3,89 @@
 
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/key_linesV">
+        app:cardCornerRadius="@dimen/key_linesV"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+      >
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ride_image_view"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_sport_car"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:padding="@dimen/key_linesV">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/offerNameTv"
-            style="@style/offer_name_style"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Go اوفر "
-            app:layout_constraintBottom_toTopOf="@+id/offerContentTv"
-            app:layout_constraintEnd_toStartOf="@+id/priceTv"
-            app:layout_constraintStart_toEndOf="@+id/ride_image_view"
-            app:layout_constraintTop_toTopOf="@+id/ride_image_view" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/selectedIV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_check_circle_24" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/priceTv"
-            style="@style/offer_description_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="50 EGP"
-            app:layout_constraintBottom_toBottomOf="@+id/offerNameTv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/offerNameTv" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ride_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sport_car"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/offerContentTv"
-            style="@style/offer_content_style"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Go اوفر "
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/timeTv"
-            app:layout_constraintStart_toEndOf="@+id/ride_image_view"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/offerNameTv"
+                style="@style/offer_name_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Go اوفر "
+                app:layout_constraintEnd_toStartOf="@+id/priceTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ride_image_view" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/timeTv"
-            style="@style/offer_description_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="30 Min"
-            app:layout_constraintBottom_toBottomOf="@+id/offerContentTv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/offerContentTv" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/priceTv"
+                style="@style/offer_content_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50 EGP"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/offerNameTv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/offerNameTv" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/offerDescriptionTv"
-            style="@style/offer_description_style"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Go اوفر "
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ride_image_view"
-            app:layout_constraintTop_toBottomOf="@+id/offerContentTv" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/offerContentTv"
+                style="@style/offer_content_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Go اوفر "
+                app:layout_constraintEnd_toStartOf="@+id/timeTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/offerNameTv" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timeTv"
+                style="@style/offer_content_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30 Min"
+                app:layout_constraintBottom_toBottomOf="@+id/offerContentTv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/offerContentTv" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/offerDescriptionTv"
+                style="@style/offer_description_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Go اوفر "
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/offerContentTv" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
 </layout>

@@ -34,8 +34,8 @@ import kotlin.random.Random
 
 class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     GoogleMap.OnCameraMoveListener, RidesAdapter.ClickListener {
-
-    private val ridesAdapter by lazy { RidesAdapter(this).apply { submitList(listOf("", "")) } }
+    private val rides = listOf("", "")
+    private val ridesAdapter by lazy { RidesAdapter(this) }
 
     private val viewModel by viewModels<HomeViewModel>()
     private val driversMap = SparseArray<DriverModel>()
@@ -152,14 +152,16 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
                 offersRV.adapter = ridesAdapter
                 backIv.setOnClickListener { onBackPressed() }
             }
-            test.setOnClickListener { updateClick() }
         }
     }
 
     private fun pickUpClick() {
+        ridesAdapter.submitList(rides)
+
         this@HomeActivity.viewModel.viewType.value = confirmViewConstant
 
         lifecycleScope.launch(defaultContext) {
+
             val map = getMap() ?: return@launch
             val lat = map.cameraPosition.target.latitude
             val lon = map.cameraPosition.target.longitude
@@ -167,7 +169,6 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
             map.drawPickUpLocation(location = pickupLocation)
 
             val dropOffLocation = dropOffMarker?.position ?: return@launch
-
             val lineOptions =
                 viewModel.directionRepo.directionDataAsync(
                     from = pickupLocation,
@@ -393,7 +394,9 @@ class HomeActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
                 getCurrentLocation()
                 pickUpMarker?.remove()
                 viewModel.mapAnimator.clear()
+
                 viewModel.isSelected.value = false
+                ridesAdapter.clear()
 
             }
 

@@ -121,7 +121,6 @@
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
             android:text="@string/confirm_pick_up"
-            android:visibility="@{viewModel.isCameraMoving?View.VISIBLE:View.GONE}"
             app:backgroundTint="@color/teal_700"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
