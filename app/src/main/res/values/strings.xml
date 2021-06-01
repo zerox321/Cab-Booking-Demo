@@ -31,5 +31,6 @@
     <string name="select_your_ride">Select your ride </string>
     <string name="select">Select</string>
     <string name="lang_key">en</string>
+    <string name="driver_is_coming">Driver Is Coming</string>
 
 </resources>

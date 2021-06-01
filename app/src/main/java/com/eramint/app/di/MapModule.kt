@@ -20,9 +20,7 @@ object MapModule {
     @Provides
     fun provideSpherical(): Spherical = Spherical()
 
-    @Singleton
-    @Provides
-    fun providePolylineOptions(): PolylineOptions = PolylineOptions()
+
 
     @Singleton
     @Provides
@@ -39,10 +37,9 @@ object MapModule {
     @Singleton
     @Provides
     fun provideDirectionRepo(
-        @ApplicationContext context: Context,
-        options: PolylineOptions
+        @ApplicationContext context: Context
     ): DirectionRepo =
-        DirectionRepo(key = context.getString(R.string.google_maps_key), options = options)
+        DirectionRepo(key = context.getString(R.string.google_maps_key))
 
     @Singleton
     @Provides

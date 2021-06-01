@@ -88,8 +88,8 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/line_divider"
                 android:layout_width="0dp"
-                android:layout_margin="@dimen/key_linesV"
                 android:layout_height="4dp"
+                android:layout_margin="@dimen/key_linesV"
                 app:layout_constraintEnd_toEndOf="@id/pickupTv"
                 app:layout_constraintStart_toStartOf="@id/pickupTv"
                 app:layout_constraintTop_toBottomOf="@id/pickupTv"
@@ -99,8 +99,8 @@
                 android:id="@+id/dropOffTv"
                 style="@style/in_progress_container_style"
                 android:layout_width="0dp"
-                android:layout_marginTop="@dimen/key_linesV"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/key_linesV"
                 android:text="@{viewModel.trip.dropName}"
                 android:textColor="@color/grey"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -109,6 +109,64 @@
                 tools:text="drop off Location Name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/driverDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/bg_trip_body"
+            android:padding="@dimen/key_lines"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/viewStateTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/driver_is_coming"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/driverImg_Iv"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="@dimen/key_linesV"
+                android:scaleType="centerCrop"
+                android:theme="@style/ShapeAppearanceOverlay.CD.ImageView.Circle"
+                app:layout_constraintBottom_toBottomOf="@+id/driverPhoneTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/driverNameTv"
+                app:srcCompat="@mipmap/ic_launcher_round"
+                tools:src="@tools:sample/avatars" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/driverNameTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/key_lines"
+                android:padding="@dimen/key_linesV"
+                android:text="Eslam Kamel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/driverImg_Iv"
+                app:layout_constraintTop_toBottomOf="@id/viewStateTv" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/driverPhoneTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/key_linesV"
+                android:paddingEnd="@dimen/key_linesV"
+                android:text="01555892962"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/driverImg_Iv"
+                app:layout_constraintTop_toBottomOf="@id/driverNameTv" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

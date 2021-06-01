@@ -58,4 +58,8 @@
         <item name="android:maxLines">2</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="ShapeAppearanceOverlay.CD.ImageView.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

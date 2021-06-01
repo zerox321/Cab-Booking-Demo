@@ -42,7 +42,7 @@ class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
     private val viewModel by viewModels<BookTripViewModel>()
     private val driversMap = SparseArray<DriverModel>()
-
+    private val polylineOptions: PolylineOptions by lazy{ PolylineOptions()}
     private val mapFragment: SupportMapFragment? by lazy {
         supportFragmentManager.findFragmentById(R.id.bookTripGoogleMap) as SupportMapFragment?
     }
@@ -205,6 +205,7 @@ class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
             val dropOffLocation = dropOffMarker?.position ?: return@launch
             val lineOptions =
                 viewModel.directionRepo.directionDataAsync(
+                    options = polylineOptions,
                     from = pickupLocation,
                     to = dropOffLocation
                 )

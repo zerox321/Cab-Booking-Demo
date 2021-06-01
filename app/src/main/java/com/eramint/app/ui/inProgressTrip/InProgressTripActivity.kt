@@ -18,6 +18,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.ktx.awaitMap
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -29,6 +30,7 @@ class InProgressTripActivity : LocationActivity() {
     private val mapFragment: SupportMapFragment? by lazy {
         supportFragmentManager.findFragmentById(R.id.inProgressGoogleMap) as SupportMapFragment?
     }
+    private val polylineOptions: PolylineOptions by lazy { PolylineOptions() }
 
     private val dropOffMap by lazy {
         viewModel.mapUtility.getBitmapFromVectorDrawable(
@@ -79,9 +81,9 @@ class InProgressTripActivity : LocationActivity() {
         super.onCreate(savedInstanceState)
         lifecycleScope.launchWhenStarted { getMap() }
 
-        val model=intent.extras?.getParcelable<InProgressModel>("item")
+        val model = intent.extras?.getParcelable<InProgressModel>("item")
 
-        updateView(model = model?:return)
+        updateView(model = model ?: return)
         bindView()
 
         lifecycleScope.launchWhenStarted {
@@ -107,6 +109,7 @@ class InProgressTripActivity : LocationActivity() {
 
             val lineOptions =
                 viewModel.directionRepo.directionDataAsync(
+                    options = polylineOptions,
                     from = pickupLocation,
                     to = dropOffLocation
                 )
