@@ -34,6 +34,7 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         val textView: TextView = binding.textHome
+
         textView.setOnClickListener {
             startActivity(Intent(this.context, BookTripActivity::class.java))
         }

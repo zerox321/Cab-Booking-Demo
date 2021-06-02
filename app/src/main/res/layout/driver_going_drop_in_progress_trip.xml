@@ -50,7 +50,8 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/key_linesV"
                 app:layout_constraintBottom_toBottomOf="@id/pickupTv"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/dropOffDot"
+                app:layout_constraintStart_toStartOf="@+id/dropOffDot"
                 app:layout_constraintTop_toTopOf="@+id/pickupTv"
                 app:srcCompat="@drawable/ic_done_state" />
 
@@ -60,8 +61,8 @@
                 android:layout_height="0dp"
                 android:background="@color/purple_500"
                 app:layout_constraintBottom_toTopOf="@+id/dropOffDot"
-                app:layout_constraintEnd_toEndOf="@+id/pickUpDot"
-                app:layout_constraintStart_toStartOf="@+id/pickUpDot"
+                app:layout_constraintEnd_toEndOf="@+id/dropOffDot"
+                app:layout_constraintStart_toStartOf="@+id/dropOffDot"
                 app:layout_constraintTop_toBottomOf="@+id/pickUpDot" />
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -79,10 +80,13 @@
                 style="@style/in_progress_container_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+
                 android:text="@{viewModel.trip.pickName}"
                 android:textColor="@color/green"
+                android:textSize="@dimen/secondFont"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/pickUpDot"
+                app:layout_constraintStart_toStartOf="@+id/dropOffTv"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="pick up Location Name" />
 
@@ -92,7 +96,7 @@
                 android:layout_height="4dp"
                 android:layout_margin="@dimen/key_linesV"
                 app:layout_constraintEnd_toEndOf="@id/pickupTv"
-                app:layout_constraintStart_toStartOf="@id/pickupTv"
+                app:layout_constraintStart_toEndOf="@+id/dropOffDot"
                 app:layout_constraintTop_toBottomOf="@id/pickupTv"
                 app:srcCompat="@drawable/ic_strip_line" />
 
@@ -101,9 +105,11 @@
                 style="@style/in_progress_container_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+
                 android:layout_marginTop="@dimen/key_linesV"
                 android:text="@{viewModel.trip.dropName}"
                 android:textColor="@color/purple_500"
+                android:textSize="@dimen/mainFont"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/dropOffDot"
                 app:layout_constraintTop_toBottomOf="@id/line_divider"
@@ -236,6 +242,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/currentLocationFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/key_lines"
+            android:animateLayoutChanges="true"
+            android:backgroundTint="@color/purple_500"
+            android:src="@drawable/ic_baseline_my_location_24"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toTopOf="@+id/driverDetails"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/driverDetails"
+            app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

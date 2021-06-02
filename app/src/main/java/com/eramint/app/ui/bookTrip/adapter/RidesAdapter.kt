@@ -11,12 +11,15 @@ import com.eramint.app.databinding.RideRowItemBinding
 class RidesAdapter(private val clickListener: ClickListener? = null) :
     ListAdapter<String, RidesAdapter.ViewHolder>(DC) {
     var selectedPosition = -1
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(
             item = currentList[position],
             clickListener = clickListener,
             position = position
         )
+    }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(

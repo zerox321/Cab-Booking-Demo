@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.ktx.awaitMap
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
@@ -123,6 +124,22 @@ class InProgressTripActivity : LocationActivity() {
         }
 
     }
+    private fun getCurrentLocation() {
+        lifecycleScope.launchWhenStarted {
+            val map = getMap() ?: return@launchWhenStarted
+            this@InProgressTripActivity.viewModel.locationFlow.map { string -> string?.toGSON() }
+                .collect { location ->
+                    viewModel.mapUtility.animateCamera(
+                        map = map,
+                        position = LatLng(
+                            location?.toLat ?: return@collect,
+                            location.toLon ?: return@collect
+                        )
+                    )
+                    this.cancel()
+                }
+        }
+    }
 
     private fun bindView() {
 
@@ -134,6 +151,8 @@ class InProgressTripActivity : LocationActivity() {
 
             viewModel = this@InProgressTripActivity.viewModel
             driverIsComingInProgressTrip.run {
+                currentLocationFab.setOnClickListener { getCurrentLocation() }
+
                 navigationIv.setOnClickListener {
                     val trip =
                         this@InProgressTripActivity.viewModel.trip.value
@@ -144,6 +163,8 @@ class InProgressTripActivity : LocationActivity() {
                 }
             }
             driverGoingDropInProgressTrip.run {
+                currentLocationFab.setOnClickListener { getCurrentLocation() }
+
                 navigationIv.setOnClickListener {
                     val trip =
                         this@InProgressTripActivity.viewModel.trip.value

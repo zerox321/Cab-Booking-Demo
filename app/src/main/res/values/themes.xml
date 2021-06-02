@@ -58,7 +58,6 @@
     </style>
 
     <style name="in_progress_container_style" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textSize">@dimen/secondFont</item>
         <item name="android:textAlignment">viewStart</item>
         <item name="android:padding">@dimen/key_linesV</item>
         <item name="android:singleLine">true</item>

@@ -156,6 +156,8 @@ class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
             // Todo attach confirm View click Listener
             confirmHome.run {
                 offersRV.adapter = ridesAdapter
+
+
                 backIv.setOnClickListener { onBackPressed() }
                 selectBT.setOnClickListener {
                     val dropOffLocation = dropOffMarker?.position ?: return@setOnClickListener
