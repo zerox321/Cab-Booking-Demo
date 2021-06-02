@@ -442,7 +442,10 @@ class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
                 dropOffMarker?.remove()
             }
 
-            else -> super.onBackPressed()
+            else -> {
+                stopLocationService()
+                super.onBackPressed()
+            }
         }
     }
 

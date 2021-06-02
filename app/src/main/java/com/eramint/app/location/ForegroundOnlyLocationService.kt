@@ -174,7 +174,6 @@ class ForegroundOnlyLocationService : Service() {
         this.dataStore = dataStore
         this.notificationManager = notificationManager
         Timber.tag(TAG).d("subscribeToLocationUpdates")
-
         // Binding to this service doesn't actually trigger onStartCommand(). That is needed to
         // ensure this Service can be promoted to a foreground service, i.e., the service needs to
         // be officially started (which we do here).
@@ -191,10 +190,11 @@ class ForegroundOnlyLocationService : Service() {
         }
     }
 
-    fun unsubscribeToLocationUpdates() {
+    fun unsubscribeToLocationUpdates(dataStore: DataStore,notificationManager: NotificationManager) {
         Timber.tag(TAG).d("unsubscribeToLocationUpdates")
-
-
+        this.dataStore = dataStore
+        this.notificationManager = notificationManager
+        configurationChange = false
         try {
             // TODO: Step 1.6, Unsubscribe to location changes.
             val removeTask = fusedLocationProviderClient.removeLocationUpdates(locationCallback)

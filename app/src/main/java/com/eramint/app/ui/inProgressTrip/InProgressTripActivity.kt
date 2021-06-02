@@ -155,6 +155,7 @@ class InProgressTripActivity : LocationActivity() {
             }
             tripRateInProgressTrip.run {
                 reviewBT.setOnClickListener {
+                    stopLocationService()
                     this@InProgressTripActivity.finish()
                 }
             }

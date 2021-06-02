@@ -28,11 +28,9 @@ abstract class LocationActivity : BaseActivity(), LocationChangeInterface {
             foregroundOnlyLocationServiceBound = true
 
             if (foregroundPermissionApproved()) {
-                foregroundOnlyLocationService?.subscribeToLocationUpdates(
-                    dataStore = dataStore,
-                    notificationManager = notificationManager
-                )
-                    ?: Timber.d(TAG, "Service Not Bound")
+
+
+                startLocationService()
             } else {
                 requestForegroundPermissions()
             }
@@ -90,8 +88,25 @@ abstract class LocationActivity : BaseActivity(), LocationChangeInterface {
     }
 
     override fun onLocationPermissionEnabled() {
-        foregroundOnlyLocationService?.subscribeToLocationUpdates(dataStore, notificationManager)
+        startLocationService()
     }
 
+    private fun startLocationService() {
+        foregroundOnlyLocationService?.subscribeToLocationUpdates(
+            dataStore = dataStore,
+            notificationManager = notificationManager
+        ) ?: Timber.d(TAG, "Service Not Bound")
+    }
+     fun stopLocationService(){
+        foregroundOnlyLocationService?.unsubscribeToLocationUpdates(
+            dataStore = dataStore,
+            notificationManager = notificationManager
+        ) ?: Timber.d(TAG, "Service Not Bound")
+    }
+
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        stopLocationService()
+//    }
     abstract fun onLocationChangeAbstraction(locationValue: Boolean)
 }
