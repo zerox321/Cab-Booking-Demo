@@ -12,7 +12,6 @@ import com.eramint.app.util.Constants
 import com.eramint.app.util.Constants.driverArrivedConstant
 import com.eramint.app.util.Constants.driverIsComingConstant
 import com.eramint.app.util.Constants.tripFinishedConstant
-import com.eramint.app.util.LocationLauncher.locationAction
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -134,16 +133,32 @@ class InProgressTripActivity : LocationActivity() {
             tripFinished = tripFinishedConstant
 
             viewModel = this@InProgressTripActivity.viewModel
-            driverIsComingInProgressTrip.navigationIv.setOnClickListener {
-                val trip =
-                    this@InProgressTripActivity.viewModel.trip.value ?: return@setOnClickListener
-                locationAction(latLong = "${trip.pickLat},${trip.pickLon}")
+            driverIsComingInProgressTrip.run {
+                navigationIv.setOnClickListener {
+                    val trip =
+                        this@InProgressTripActivity.viewModel.trip.value
+                            ?: return@setOnClickListener
+//                locationAction(latLong = "${trip.pickLat},${trip.pickLon}")
+                    trip.tripState = driverArrivedConstant
+                    this@InProgressTripActivity.viewModel.trip.value = trip
+                }
             }
-            driverGoingDropInProgressTrip.navigationIv.setOnClickListener {
-                val trip =
-                    this@InProgressTripActivity.viewModel.trip.value ?: return@setOnClickListener
-                locationAction(latLong = "${trip.dropLat},${trip.dropLon}")
+            driverGoingDropInProgressTrip.run {
+                navigationIv.setOnClickListener {
+                    val trip =
+                        this@InProgressTripActivity.viewModel.trip.value
+                            ?: return@setOnClickListener
+//                locationAction(latLong = "${trip.dropLat},${trip.dropLon}")
+                    trip.tripState = tripFinishedConstant
+                    this@InProgressTripActivity.viewModel.trip.value = trip
+                }
             }
+            tripRateInProgressTrip.run {
+                reviewBT.setOnClickListener {
+                    this@InProgressTripActivity.finish()
+                }
+            }
+
         }
     }
 

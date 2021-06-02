@@ -33,5 +33,8 @@
     <string name="lang_key">en</string>
     <string name="driver_is_coming">Driver Is Coming</string>
     <string name="driver_is_going_to_drop_off">Driver is going to drop off</string>
+    <string name="review_trip">Please Rate Trip</string>
+    <string name="review">Review</string>
+    <string name="please_review_driver">Please Rate Driver</string>
 
 </resources>

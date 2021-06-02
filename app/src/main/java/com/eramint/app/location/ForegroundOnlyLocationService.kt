@@ -40,14 +40,14 @@ class ForegroundOnlyLocationService : Service() {
 
     private var dataStore: DataStore? = null
 
+    private var notificationManager: NotificationManager? = null
+
     private var configurationChange = false
 
     private var serviceRunningInForeground = false
 
     private val localBinder by lazy { LocalBinder() }
-    private val notificationManager: NotificationManager by lazy {
-        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    }
+
 
 
     private val fusedLocationProviderClient: FusedLocationProviderClient by lazy {
@@ -81,7 +81,7 @@ class ForegroundOnlyLocationService : Service() {
                 // Updates notification content if this service is running as a foreground
                 // service.
                 if (serviceRunningInForeground)
-                    notificationManager.notify(NOTIFICATION_ID, generateNotification(newLocation))
+                    notificationManager?.notify(NOTIFICATION_ID, generateNotification(newLocation))
 
             }
         }
@@ -170,8 +170,9 @@ class ForegroundOnlyLocationService : Service() {
         configurationChange = true
     }
 
-    fun subscribeToLocationUpdates(dataStore: DataStore) {
+    fun subscribeToLocationUpdates(dataStore: DataStore,notificationManager: NotificationManager) {
         this.dataStore = dataStore
+        this.notificationManager = notificationManager
         Timber.tag(TAG).d("subscribeToLocationUpdates")
 
         // Binding to this service doesn't actually trigger onStartCommand(). That is needed to
@@ -238,7 +239,7 @@ class ForegroundOnlyLocationService : Service() {
             // Adds NotificationChannel to system. Attempting to create an
             // existing notification channel with its original values performs
             // no operation, so it's safe to perform the below sequence.
-            notificationManager.createNotificationChannel(notificationChannel)
+            notificationManager?.createNotificationChannel(notificationChannel)
         }
 
         // 2. Build the BIG_TEXT_STYLE.

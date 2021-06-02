@@ -57,6 +57,21 @@
             tools:visibility="gone" />
 
         <include
+            android:id="@+id/trip_rate_in_progress_trip"
+            layout="@layout/trip_rate_in_progress_trip"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/key_lines"
+            android:layout_marginEnd="@dimen/key_lines"
+            android:visibility="@{viewModel.trip.tripState==tripFinished?View.VISIBLE:View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:viewModel="@{viewModel}"
+            tools:visibility="gone" />
+
+        <include
             android:id="@+id/noLocationView"
             layout="@layout/location_disabled_view"
             android:layout_width="wrap_content"

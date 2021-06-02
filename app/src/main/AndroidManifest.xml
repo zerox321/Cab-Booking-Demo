@@ -18,21 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationService">
-        <activity
-            android:name=".ui.inProgressTrip.InProgressTripActivity"
-            android:screenOrientation="nosensor">
-
-
-        </activity>
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
-        <activity
-            android:name=".ui.bookTrip.BookTripActivity"
-            android:screenOrientation="nosensor">
-
+        <activity android:name=".ui.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -40,7 +26,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.inProgressTrip.InProgressTripActivity"
+            android:screenOrientation="nosensor" />
 
+        <activity
+            android:name=".ui.bookTrip.BookTripActivity"
+            android:screenOrientation="nosensor" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
         <service
             android:name=".location.ForegroundOnlyLocationService"
             android:enabled="true"

@@ -12,16 +12,21 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+
 @Module
 @InstallIn(SingletonComponent::class)
-object PersistenceModule {
+object LocationModule {
+
 
     @Singleton
     @Provides
-    fun provideDataStore(@ApplicationContext context: Context): DataStore =
-        DataStore(
-            context = context,
-            name = BuildConfig.APPLICATION_ID
-        )
+    fun provideLocationManager(@ApplicationContext context: Context): LocationManager =
+        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+    @Singleton
+    @Provides
+    fun provideNotificationManager(@ApplicationContext context: Context): NotificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
 
 }
