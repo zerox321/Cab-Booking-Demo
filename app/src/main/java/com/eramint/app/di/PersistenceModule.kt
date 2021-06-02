@@ -16,12 +16,11 @@ object PersistenceModule {
 
     @Singleton
     @Provides
-    fun provideDataStore(@ApplicationContext context: Context): DataStore = DataStore(
-        context = context,
-        name = BuildConfig.APPLICATION_ID
-    )
-
-
+    fun provideDataStore(@ApplicationContext context: Context): DataStore =
+        DataStore(
+            context = context,
+            name = BuildConfig.APPLICATION_ID
+        )
 
 
 }

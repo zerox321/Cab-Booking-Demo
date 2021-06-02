@@ -7,6 +7,7 @@ import com.eramint.app.util.Constants.dropOffViewConstant
 import com.eramint.app.util.Constants.pickupViewConstant
 
 import com.eramint.app.util.mapUtility.*
+import com.google.android.gms.maps.model.PolylineOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -18,7 +19,8 @@ class BookTripViewModel @Inject constructor(
     val markerAnimation: MarkerAnimation,
     val mapUtility: MapUtility,
     val directionRepo: DirectionRepo,
-    val mapAnimator: MapAnimator
+    val mapAnimator: MapAnimator,
+    val polylineOptions: PolylineOptions
 ) : ViewModel() {
     val locationFlow: Flow<String?> = dataStore.getValue(DataStore.location)
 
@@ -35,7 +37,7 @@ class BookTripViewModel @Inject constructor(
             dropOffViewConstant -> dropOffPlaceTitleText.value = location
         }
     }
-    
+
     val isLocationEnabled = MutableLiveData<Boolean>(true)
 
 

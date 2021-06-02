@@ -9,7 +9,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 
-class MapAnimator(private val routeEvaluator:RouteEvaluator,private val primary: Int, private val second: Int) {
+class MapAnimator(
+    private val routeEvaluator: RouteEvaluator,
+    private val primary: Int,
+    private val second: Int
+) {
 
     private var backgroundPolyline: Polyline? = null
     private var foregroundPolyline: Polyline? = null

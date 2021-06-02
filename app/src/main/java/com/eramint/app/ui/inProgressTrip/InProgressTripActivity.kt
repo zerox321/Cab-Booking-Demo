@@ -12,17 +12,16 @@ import com.eramint.app.util.Constants
 import com.eramint.app.util.Constants.driverArrivedConstant
 import com.eramint.app.util.Constants.driverIsComingConstant
 import com.eramint.app.util.Constants.tripFinishedConstant
+import com.eramint.app.util.LocationLauncher.locationAction
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.PolylineOptions
 import com.google.maps.android.ktx.awaitMap
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class InProgressTripActivity : LocationActivity() {
@@ -30,7 +29,6 @@ class InProgressTripActivity : LocationActivity() {
     private val mapFragment: SupportMapFragment? by lazy {
         supportFragmentManager.findFragmentById(R.id.inProgressGoogleMap) as SupportMapFragment?
     }
-    private val polylineOptions: PolylineOptions by lazy { PolylineOptions() }
 
     private val dropOffMap by lazy {
         viewModel.mapUtility.getBitmapFromVectorDrawable(
@@ -82,7 +80,6 @@ class InProgressTripActivity : LocationActivity() {
         lifecycleScope.launchWhenStarted { getMap() }
 
         val model = intent.extras?.getParcelable<InProgressModel>("item")
-
         updateView(model = model ?: return)
         bindView()
 
@@ -98,8 +95,8 @@ class InProgressTripActivity : LocationActivity() {
 
     private fun updateView(model: InProgressModel) {
         viewModel.updateView(model = model)
-        lifecycleScope.launch(defaultContext) {
-            val map = getMap() ?: return@launch
+        lifecycleScope.launchWhenStarted {
+            val map = getMap() ?: return@launchWhenStarted
 
             val dropOffLocation = LatLng(model.dropLat, model.dropLon)
             map.drawDropOffLocation(location = dropOffLocation)
@@ -109,11 +106,11 @@ class InProgressTripActivity : LocationActivity() {
 
             val lineOptions =
                 viewModel.directionRepo.directionDataAsync(
-                    options = polylineOptions,
+                    options = viewModel.polylineOptions,
                     from = pickupLocation,
                     to = dropOffLocation
                 )
-                    ?: return@launch
+                    ?: return@launchWhenStarted
             val points = lineOptions.points
             val bounds: LatLngBounds = LatLngBounds.Builder().apply {
                 for (point in points)
@@ -128,7 +125,6 @@ class InProgressTripActivity : LocationActivity() {
 
     }
 
-
     private fun bindView() {
 
         binding.run {
@@ -138,7 +134,16 @@ class InProgressTripActivity : LocationActivity() {
             tripFinished = tripFinishedConstant
 
             viewModel = this@InProgressTripActivity.viewModel
-
+            driverIsComingInProgressTrip.navigationIv.setOnClickListener {
+                val trip =
+                    this@InProgressTripActivity.viewModel.trip.value ?: return@setOnClickListener
+                locationAction(latLong = "${trip.pickLat},${trip.pickLon}")
+            }
+            driverGoingDropInProgressTrip.navigationIv.setOnClickListener {
+                val trip =
+                    this@InProgressTripActivity.viewModel.trip.value ?: return@setOnClickListener
+                locationAction(latLong = "${trip.dropLat},${trip.dropLon}")
+            }
         }
     }
 

@@ -17,6 +17,7 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         tools:background="@color/grey">
+        <!--        android:rotationY="180"-->
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/navigationIv"
@@ -51,13 +52,13 @@
                 app:layout_constraintBottom_toBottomOf="@id/pickupTv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/pickupTv"
-                app:srcCompat="@drawable/ic_active_state" />
+                app:srcCompat="@drawable/ic_done_state" />
 
             <View
                 android:id="@+id/linkView"
                 android:layout_width="1dp"
                 android:layout_height="0dp"
-                android:background="@color/purple50"
+                android:background="@color/purple_500"
                 app:layout_constraintBottom_toTopOf="@+id/dropOffDot"
                 app:layout_constraintEnd_toEndOf="@+id/pickUpDot"
                 app:layout_constraintStart_toStartOf="@+id/pickUpDot"
@@ -71,7 +72,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/dropOffTv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/dropOffTv"
-                app:srcCompat="@drawable/ic_in_active_state" />
+                app:srcCompat="@drawable/ic_active_state" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/pickupTv"
@@ -79,7 +80,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.trip.pickName}"
-                android:textColor="@color/purple_500"
+                android:textColor="@color/green"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/pickUpDot"
                 app:layout_constraintTop_toTopOf="parent"
@@ -102,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/key_linesV"
                 android:text="@{viewModel.trip.dropName}"
-                android:textColor="@color/grey"
+                android:textColor="@color/purple_500"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/dropOffDot"
                 app:layout_constraintTop_toBottomOf="@id/line_divider"
@@ -125,7 +126,7 @@
                 android:id="@+id/viewStateTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/driver_is_coming"
+                android:text="@string/driver_is_going_to_drop_off"
                 android:textColor="@color/purple_700"
                 android:textSize="@dimen/mainFont"
                 android:textStyle="bold"

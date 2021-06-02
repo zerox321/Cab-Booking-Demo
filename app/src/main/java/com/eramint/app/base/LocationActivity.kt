@@ -1,7 +1,6 @@
 package com.eramint.app.base
 
 import android.Manifest
-import android.app.NotificationManager
 import android.content.*
 import android.content.pm.PackageManager
 import android.location.LocationManager
@@ -17,14 +16,11 @@ import com.eramint.app.location.GpsLocationReceiver
 import com.eramint.app.location.LocationChangeInterface
 import com.eramint.app.util.Constants.REQUESTFOREGROUNDONLYPERMISSIONSREQUEST_CODE
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
 
 
 abstract class LocationActivity : BaseActivity(), LocationChangeInterface {
 
-
-    internal val defaultContext = Dispatchers.Main
 
     private var foregroundOnlyLocationServiceBound = false
 
@@ -41,7 +37,8 @@ abstract class LocationActivity : BaseActivity(), LocationChangeInterface {
             foregroundOnlyLocationServiceBound = true
 
             if (foregroundPermissionApproved()) {
-                foregroundOnlyLocationService?.subscribeToLocationUpdates(dataStore = dataStore) ?: Timber.d(TAG, "Service Not Bound")
+                foregroundOnlyLocationService?.subscribeToLocationUpdates(dataStore = dataStore)
+                    ?: Timber.d(TAG, "Service Not Bound")
             } else {
                 requestForegroundPermissions()
             }
@@ -90,8 +87,6 @@ abstract class LocationActivity : BaseActivity(), LocationChangeInterface {
         super.onStop()
 
     }
-
-
 
 
     override fun onResume() {

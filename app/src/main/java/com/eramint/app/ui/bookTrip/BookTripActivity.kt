@@ -29,7 +29,6 @@ import com.google.maps.android.ktx.awaitMap
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import kotlin.random.Random
@@ -42,7 +41,6 @@ class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
     private val viewModel by viewModels<BookTripViewModel>()
     private val driversMap = SparseArray<DriverModel>()
-    private val polylineOptions: PolylineOptions by lazy{ PolylineOptions()}
     private val mapFragment: SupportMapFragment? by lazy {
         supportFragmentManager.findFragmentById(R.id.bookTripGoogleMap) as SupportMapFragment?
     }
@@ -176,14 +174,17 @@ class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
                         tripID = 1,
                         tripState = Constants.driverIsComingConstant,
                         price = "200 EGP",
-                        rideType = "Go اوفر "
+                        rideType = "Go اوفر ",
+                        driverName = "Eslma Kamel",
+                        driverPhone = "01555892962",
+                        driverProfile = "https://avatars.githubusercontent.com/u/13874259?v=4"
                     )
                     val intent =
                         Intent(this@BookTripActivity, InProgressTripActivity::class.java).apply {
                             putExtra("item", model)
                         }
                     startActivity(intent)
-//                    this@BookTripActivity.finish()
+                    this@BookTripActivity.finish()
                 }
             }
         }
@@ -194,23 +195,23 @@ class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
 
         this@BookTripActivity.viewModel.viewType.value = confirmViewConstant
 
-        lifecycleScope.launch(defaultContext) {
+        lifecycleScope.launchWhenStarted {
 
-            val map = getMap() ?: return@launch
+            val map = getMap() ?: return@launchWhenStarted
             val lat = map.cameraPosition.target.latitude
             val lon = map.cameraPosition.target.longitude
             val pickupLocation = LatLng(lat, lon)
             map.drawPickUpLocation(location = pickupLocation)
 
-            val dropOffLocation = dropOffMarker?.position ?: return@launch
+            val dropOffLocation = dropOffMarker?.position ?: return@launchWhenStarted
             val lineOptions =
                 viewModel.directionRepo.directionDataAsync(
-                    options = polylineOptions,
+                    options = viewModel.polylineOptions,
                     from = pickupLocation,
                     to = dropOffLocation
                 )
-                    ?: return@launch
-            if (viewModel.viewType.value != confirmViewConstant) return@launch
+                    ?: return@launchWhenStarted
+            if (viewModel.viewType.value != confirmViewConstant) return@launchWhenStarted
             val points = lineOptions.points
             val bounds: LatLngBounds = LatLngBounds.Builder().apply {
                 for (point in points)
@@ -228,8 +229,8 @@ class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     private fun dropOffClick() {
         this@BookTripActivity.viewModel.viewType.value = pickupViewConstant
 
-        lifecycleScope.launch(defaultContext) {
-            val map = getMap() ?: return@launch
+        lifecycleScope.launchWhenStarted {
+            val map = getMap() ?: return@launchWhenStarted
             val lat = map.cameraPosition.target.latitude
             val lon = map.cameraPosition.target.longitude
 
@@ -299,8 +300,8 @@ class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     }
 
     private fun updateClick() {
-        lifecycleScope.launch(defaultContext) {
-            val map = getMap() ?: return@launch
+        lifecycleScope.launchWhenStarted {
+            val map = getMap() ?: return@launchWhenStarted
             map.updateDriver(
                 driverID = getID(),
                 locationModel = driver()
@@ -328,8 +329,8 @@ class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     }
 
     private fun addClick() {
-        lifecycleScope.launch(defaultContext) {
-            val map = getMap() ?: return@launch
+        lifecycleScope.launchWhenStarted {
+            val map = getMap() ?: return@launchWhenStarted
             map.addDriver(
                 driverID = 1,
                 driver = driver()
@@ -402,10 +403,10 @@ class BookTripActivity : LocationActivity(), GoogleMap.OnCameraIdleListener,
     private fun getLocationName() {
         val viewType = viewModel.viewType.value
         if (viewType != pickupViewConstant && viewType != dropOffViewConstant) return
-        lifecycleScope.launch(defaultContext) {
-            val map = getMap() ?: return@launch
+        lifecycleScope.launchWhenStarted {
+            val map = getMap() ?: return@launchWhenStarted
             val location = viewModel.mapUtility.getAddress(
-                geocoder = geoCoder ?: return@launch,
+                geocoder = geoCoder ?: return@launchWhenStarted,
                 map.cameraPosition.target.latitude,
                 map.cameraPosition.target.longitude
             )

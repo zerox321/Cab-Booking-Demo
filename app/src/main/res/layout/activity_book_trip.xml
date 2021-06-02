@@ -34,6 +34,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:animateLayoutChanges="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,14 +60,15 @@
             android:visibility="@{viewModel.viewType==confirmView?View.VISIBLE:View.GONE}"
             app:viewModel="@{viewModel}"
             tools:visibility="gone" />
+
         <include
             android:id="@+id/noLocationView"
             layout="@layout/location_disabled_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:visibility="@{viewModel.isLocationEnabled()?View.GONE:View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

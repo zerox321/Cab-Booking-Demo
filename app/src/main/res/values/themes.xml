@@ -33,6 +33,8 @@
         <item name="android:textAlignment">viewStart</item>
         <item name="android:padding">@dimen/key_linesV</item>
         <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+
     </style>
 
     <style name="offer_content_style" parent="Widget.MaterialComponents.TextView">
@@ -41,6 +43,8 @@
         <item name="android:paddingStart">@dimen/key_linesV</item>
         <item name="android:paddingEnd">@dimen/key_linesV</item>
         <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+
     </style>
 
     <style name="offer_description_style" parent="Widget.MaterialComponents.TextView">
@@ -49,15 +53,19 @@
         <item name="android:textAlignment">viewStart</item>
         <item name="android:padding">@dimen/key_linesV</item>
         <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+
     </style>
 
     <style name="in_progress_container_style" parent="Widget.MaterialComponents.TextView">
         <item name="android:textSize">@dimen/secondFont</item>
         <item name="android:textAlignment">viewStart</item>
         <item name="android:padding">@dimen/key_linesV</item>
-        <item name="android:maxLines">2</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="ShapeAppearanceOverlay.CD.ImageView.Circle" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>

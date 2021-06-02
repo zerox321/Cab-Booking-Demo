@@ -1,6 +1,5 @@
 package com.eramint.app.util.mapUtility
 
-import android.util.Log
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser

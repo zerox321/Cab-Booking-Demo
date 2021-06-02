@@ -44,7 +44,7 @@ class ForegroundOnlyLocationService : Service() {
 
     private var serviceRunningInForeground = false
 
-    private val localBinder by lazy{ LocalBinder() }
+    private val localBinder by lazy { LocalBinder() }
     private val notificationManager: NotificationManager by lazy {
         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
@@ -216,7 +216,7 @@ class ForegroundOnlyLocationService : Service() {
      * Generates a BIG_TEXT_STYLE Notification that represent latest location.
      */
     private fun generateNotification(location: LatLng?): Notification {
-        Timber.tag(TAG).d( "generateNotification()")
+        Timber.tag(TAG).d("generateNotification()")
 
         // Main steps for building a BIG_TEXT_STYLE notification:
         //      0. Get data

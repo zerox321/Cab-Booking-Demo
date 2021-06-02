@@ -47,6 +47,7 @@ class MapUtility {
             }
         }
     }
+
     fun moveMapCamera(map: GoogleMap, position: LatLng) {
         Timber.e("moveMapCamera: $position")
         map.moveCamera(
@@ -198,9 +199,10 @@ class MapUtility {
                 val addresses: List<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
                 addresses?.let {
                     val returnedAddress: Address = addresses[0]
-                    val address = "${returnedAddress.adminArea ?: ""}," +
-                            " ${returnedAddress.subAdminArea ?: ""}, ${returnedAddress.locality ?: ""}," +
-                            " ${returnedAddress.thoroughfare ?: ""}"
+
+                    val address = "${returnedAddress.thoroughfare ?: ""}," +
+                            " ${returnedAddress.locality ?: ""}, ${returnedAddress.subAdminArea ?: ""}," +
+                            " ${returnedAddress.adminArea ?: ""}"
 
                     address
                 } ?: ""

@@ -13,10 +13,13 @@ data class InProgressModel(
     val rideType: String,
 
     val tripID: Int,
-    val tripState: Int,
+    var tripState: Int,
 
     val pickLat: Double,
     val pickLon: Double,
     val pickName: String,
+    val driverName: String,
+    val driverPhone: String,
+    val driverProfile: String,
 
-    ):Parcelable
+    ) : Parcelable

@@ -32,5 +32,6 @@
     <string name="select">Select</string>
     <string name="lang_key">en</string>
     <string name="driver_is_coming">Driver Is Coming</string>
+    <string name="driver_is_going_to_drop_off">Driver is going to drop off</string>
 
 </resources>

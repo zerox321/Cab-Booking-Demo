@@ -50,6 +50,13 @@
             tools:visibility="visible" />
 
         <include
+            android:id="@+id/driver_going_drop_in_progress_trip"
+            layout="@layout/driver_going_drop_in_progress_trip"
+            android:visibility="@{viewModel.trip.tripState==driverArrived?View.VISIBLE:View.GONE}"
+            app:viewModel="@{viewModel}"
+            tools:visibility="gone" />
+
+        <include
             android:id="@+id/noLocationView"
             layout="@layout/location_disabled_view"
             android:layout_width="wrap_content"
