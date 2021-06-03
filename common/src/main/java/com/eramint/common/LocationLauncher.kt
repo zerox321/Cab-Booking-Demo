@@ -1,4 +1,4 @@
-package com.eramint.app.util
+package com.eramint.common
 
 import android.content.Context
 import android.content.Intent
