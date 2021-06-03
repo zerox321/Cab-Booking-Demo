@@ -1,2 +1,6 @@
 rootProject.name = "Cab Booking Demo"
-include ':app'
+include ':client'
+include ':data'
+include ':domain'
+include ':driver'
+include ':common'

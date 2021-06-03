@@ -1,0 +1,60 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+apply from: '../dependencies.gradle'
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildToolsVersion
+
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
+        versionCode versions.versionCode
+        versionName versions.versionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildTypes {
+        release {
+            buildConfigField 'String', 'baseUrl', '"https://uglab.za3bot.com/api/"'
+        }
+        debug {
+            buildConfigField 'String', 'baseUrl', '"https://uglab.za3bot.com/api/"'
+
+        }
+    }
+}
+
+dependencies {
+    implementation project(":data")
+
+
+    // network
+    api "com.squareup.retrofit2:retrofit:$versions.retrofitVersion"
+    api "com.squareup.okhttp3:logging-interceptor:$versions.okhttpVersion"
+    api "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion"
+
+    api "javax.inject:javax.inject:1"
+
+
+    // Room
+    api "androidx.room:room-ktx:$versions.roomVersion"
+//    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
+    kapt "androidx.room:room-compiler:$versions.roomVersion"
+
+    // debug
+    api "com.jakewharton.timber:timber:$versions.timberVersion"
+
+    // datastore
+    api "androidx.datastore:datastore-preferences:1.0.0-beta01"
+
+}
