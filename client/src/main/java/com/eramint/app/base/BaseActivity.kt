@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.eramint.app.BuildConfig
 import com.eramint.app.R
+
 import com.eramint.data.Constants
 import com.eramint.domain.local.pref.DataStore
 import com.google.android.material.snackbar.Snackbar

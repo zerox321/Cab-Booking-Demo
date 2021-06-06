@@ -65,4 +65,8 @@ dependencies {
 
 // Hilt
     api 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
+
+    api 'com.facebook.shimmer:shimmer:0.1.0@aar'
+    implementation project(path: ':domain')
+
 }
