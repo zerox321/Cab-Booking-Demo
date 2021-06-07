@@ -4,5 +4,6 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_in_progress_trip">Map</string>
+    <string name="driver_is_offline">You\'re offline</string>
     <!--    <string name="notification_channel_id">notification_channel_id</string>-->
 </resources>
